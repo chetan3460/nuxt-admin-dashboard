@@ -1,0 +1,77 @@
+/*
+  Module: Data
+  Purpose: Mock/demo data for Kafka table
+*/
+export const kafkaData = {
+  lastUpdated: "16:50:01",
+  rows: [
+    {
+      name: "Kafka 1",
+      host: "equify-gcp-k1",
+      cpu: 8.5,
+      memory: 55.0,
+      threads: 230,
+      connections: 37,
+      heapMb: 450,
+      topicHealth: "Normal",
+      status: "Active",
+      exceededThreshold: false,
+      topics: [
+        { topic: "sms.equ101.trans.created", messages: 10000000 },
+        { topic: "sms.equ101.trans.success", messages: 5600000 },
+        { topic: "sms.equ101.trans.failed", messages: 5700000 },
+        { topic: "sms.equ101.auth.otp_sent", messages: 12500000 },
+        { topic: "sms.equ101.auth.otp_verified", messages: 11950000 },
+        { topic: "sms.equ101.promo.campaign_sent", messages: 25000000 },
+        { topic: "sms.equ101.notif.delivery_update", messages: 3200000 },
+        { topic: "sms.equ101.account.pw_reset", messages: 850000 },
+        { topic: "sms.equ101.support.ticket_update", messages: 450000 },
+        { topic: "sms.equ101.system.maintenance_alert", messages: 95000 },
+      ],
+    },
+    {
+      name: "Kafka 2",
+      host: "equify-gcp-k2",
+      cpu: 45.6,
+      memory: 40.6,
+      threads: 200,
+      connections: 65,
+      heapMb: 450,
+      topicHealth: "Normal",
+      status: "Inactive",
+      exceededThreshold: false,
+      topics: [],
+    },
+    {
+      name: "Kafka 3",
+      host: "equify-gcp-k3",
+      cpu: 50.8,
+      memory: 78.0,
+      threads: 1000,
+      connections: 33,
+      heapMb: 5,
+      topicHealth: "Normal",
+      status: "Inactive",
+      exceededThreshold: false,
+      topics: [],
+    },
+    {
+      host: "equify-gcp-k4",
+      timestamp: "2025-08-07T16:30:01",
+      componentType: "Kafka",
+      name: "Kafka4",
+      status: "Active",
+      cpu: 3.3,
+      memory: 90.6,
+      threads: 349,
+      connections: 58,
+      heapMb: 274.33,
+      topicHealth: "Warning",
+      exceededThreshold: true,
+      topics: [],
+    },
+  ],
+};
+
+export const MEMORY_THRESHOLD = 80;
+export const THREADS_THRESHOLD = 300;

@@ -16,6 +16,7 @@ import Badge from "@/components/ui/badge/Badge.vue";
 import DragHandleDots16 from "@/components/dashboard/ui/icons/DragHandleDots16.vue";
 import OptionsDropdown from "@/components/dashboard/ui/OptionsDropdown.vue";
 import CriticalBadge from "../shared/CriticalBadge.vue";
+import SortableHeaderCell from "../shared/SortableHeaderCell.vue";
 import { exportCsv } from "@/utils/csv";
 import { applicationsData } from "./data";
 import { columns } from "./config";
@@ -112,39 +113,44 @@ const isScrollable = computed(() => sortedRows.value.length > 6);
       <div class="overflow-hidden">
         <div :class="isScrollable ? 'max-h-72 overflow-y-auto' : ''">
           <Table>
-            <TableHeader class="sticky top-0 z-10 bg-background">
+            <TableHeader
+              class="sticky top-0 z-10 bg-header-bg dark:bg-header-bg-dark"
+            >
               <TableRow>
-                <TableHead
+                <SortableHeaderCell
                   v-for="col in Object.values(columns)"
                   :key="col.key"
-                  class="cursor-pointer select-none hover:bg-muted/50"
-                  @click="handleSort(col.key)"
-                >
-                  <div class="flex items-center gap-1">
-                    <span>{{ col.label }}</span>
-                    <span v-if="sortKey === col.key" class="text-xs">
-                      {{ sortDir === "asc" ? "↑" : "↓" }}
-                    </span>
-                  </div>
-                </TableHead>
+                  :label="col.label"
+                  :column-key="col.key"
+                  :sort-key="sortKey"
+                  :sort-dir="sortDir"
+                  @sort="handleSort"
+                />
               </TableRow>
             </TableHeader>
 
             <TableBody>
-              <TableRow v-for="(row, idx) in sortedRows" :key="row.name ?? idx">
+              <TableRow
+                v-for="(row, idx) in sortedRows"
+                :key="row.name ?? idx"
+                :class="{
+                  'bg-destructive-foreground/10 dark:bg-red-950/20':
+                    row.status === 'Inactive',
+                }"
+              >
                 <TableCell>
-                  <span class="inline-flex items-center gap-1">
+                  <span class="inline-flex items-center gap-1 text-primary">
                     {{ row.name }}
                     <CriticalBadge v-if="row.exceededThreshold" />
                   </span>
                 </TableCell>
-                <TableCell>{{ row.host }}</TableCell>
+                <TableCell class="text-default-900">{{ row.host }}</TableCell>
                 <TableCell>{{ formatFixed(row.cpu, 1) }}</TableCell>
                 <TableCell>{{ formatFixed(row.memory, 1) }}</TableCell>
                 <TableCell>{{ formatInteger(row.threads) }}</TableCell>
                 <TableCell>{{ formatFixed(row.heap, 2) }}</TableCell>
                 <TableCell>
-                  <Badge :variant="getStatusColor(row.status)">
+                  <Badge :color="getStatusColor(row.status)">
                     {{ row.status }}
                   </Badge>
                 </TableCell>

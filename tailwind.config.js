@@ -113,6 +113,8 @@ export default {
                     DEFAULT: "hsl(var(--card) / <alpha-value>)",
                     foreground: "hsl(var(--card-foreground) / <alpha-value>)",
                 },
+                'header-bg': '#DADAFA',
+                'header-bg-dark': '#33445B',
             },
             boxShadow: {
                 sm: "0px 1px 2px 0px rgba(15, 22, 36, 0.06), 0px 1px 3px 0px rgba(15, 22, 36, 0.10)",
