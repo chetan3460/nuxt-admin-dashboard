@@ -6,7 +6,10 @@ import CardHeader from "@/components/ui/card/CardHeader.vue";
 import CardTitle from "@/components/ui/card/CardTitle.vue";
 import CardDescription from "@/components/ui/card/CardDescription.vue";
 import DragHandleDots16 from "@/components/dashboard/ui/icons/DragHandleDots16.vue";
+import OptionsDropdown from "@/components/dashboard/ui/OptionsDropdown.vue";
+import DashboardSelect from "@/components/dashboard/ui/DashboardSelect.vue";
 import { getDeptChartData } from "../data";
+import { exportCsv } from "@/utils/csv";
 
 const props = defineProps<{
   deptData?: any;
@@ -20,6 +23,12 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: "periodChange", period: string): void;
 }>();
+
+const handleAction = (id: string) => {
+  if (id === "export") {
+    exportCsv("sms-by-department.csv", chartData);
+  }
+};
 
 const { chartData, lastUpdated } = getDeptChartData(props.deptData);
 
@@ -82,18 +91,12 @@ const chartOptions = computed(() => ({
           <DragHandleDots16 />
         </div>
         <div v-else class="flex items-center gap-2">
-          <select
+          <DashboardSelect
             :value="selectedPeriod"
-            @change="
-              (e) =>
-                emit('periodChange', (e.target as HTMLSelectElement).value)
-            "
-            class="text-sm border rounded px-2 py-1 bg-background"
-          >
-            <option v-for="opt in selectOptions" :key="opt" :value="opt">
-              {{ opt }}
-            </option>
-          </select>
+            :onChange="(val) => emit('periodChange', val)"
+            :options="selectOptions"
+          />
+          <OptionsDropdown :onAction="handleAction" />
         </div>
       </div>
     </div>

@@ -8,10 +8,37 @@ import CardTitle from "@/components/ui/card/CardTitle.vue";
 import CardDescription from "@/components/ui/card/CardDescription.vue";
 import CardContent from "@/components/ui/card/CardContent.vue";
 import DragHandleDots16 from "@/components/dashboard/ui/icons/DragHandleDots16.vue";
+import OptionsDropdown from "@/components/dashboard/ui/OptionsDropdown.vue";
+import DashboardSelect from "@/components/dashboard/ui/DashboardSelect.vue";
 import { successfulTransactionsRaw, successfulTransactionsData } from "../data";
+import { exportCsv } from "@/utils/csv";
 
 const dragModeStore = useDragModeStore();
 const colorMode = useColorMode();
+
+const props = defineProps({
+  height: {
+    type: [Number, String],
+    default: 384,
+  },
+});
+
+const selectedPeriod = ref("Today");
+const selectOptions = ["Today", "This week", "This month"];
+
+const handlePeriodChange = (period: string) => {
+  selectedPeriod.value = period;
+};
+
+const handleAction = (id: string) => {
+  if (id === "export") {
+    const exportData = successfulTransactionsData.map((item) => ({
+      provider: item.name,
+      transactions: item.value,
+    }));
+    exportCsv("successful-transactions.csv", exportData);
+  }
+};
 
 const chartSeries = computed(() => [
   {
@@ -25,14 +52,20 @@ const chartOptions = computed(() => {
 
   return {
     chart: {
-      type: "line",
+      type: "bar",
       background: "transparent",
       toolbar: { show: false },
       zoom: { enabled: false },
     },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        borderRadius: 4,
+        barHeight: "50%",
+      },
+    },
     stroke: {
-      curve: "smooth",
-      width: 3,
+      width: 0,
     },
     colors: ["#60C345"],
     fill: {
@@ -104,7 +137,7 @@ const chartOptions = computed(() => {
   <Card class="h-full flex flex-col">
     <div class="flex items-center justify-between">
       <CardHeader>
-        <CardTitle>Successful Transactions</CardTitle>
+        <CardTitle>Successful transactions today</CardTitle>
         <CardDescription>
           Last updated ({{ successfulTransactionsRaw.lastUpdated }})
         </CardDescription>
@@ -116,14 +149,24 @@ const chartOptions = computed(() => {
         >
           <DragHandleDots16 />
         </div>
+        <template v-else>
+          <DashboardSelect
+            :value="selectedPeriod"
+            :onChange="handlePeriodChange"
+            :options="selectOptions"
+          />
+          <OptionsDropdown :onAction="handleAction" />
+        </template>
       </div>
     </div>
 
     <CardContent class="flex-1 flex flex-col">
-      <div class="h-full">
+      <div
+        :style="{ height: typeof height === 'number' ? `${height}px` : height }"
+      >
         <ClientOnly>
           <apexchart
-            type="line"
+            type="bar"
             height="100%"
             :options="chartOptions"
             :series="chartSeries"

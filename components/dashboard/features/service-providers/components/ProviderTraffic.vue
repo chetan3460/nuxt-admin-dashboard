@@ -8,10 +8,30 @@ import CardTitle from "@/components/ui/card/CardTitle.vue";
 import CardDescription from "@/components/ui/card/CardDescription.vue";
 import CardContent from "@/components/ui/card/CardContent.vue";
 import DragHandleDots16 from "@/components/dashboard/ui/icons/DragHandleDots16.vue";
+import OptionsDropdown from "@/components/dashboard/ui/OptionsDropdown.vue";
+import DashboardSelect from "@/components/dashboard/ui/DashboardSelect.vue";
 import { providerTrafficRaw, providerTrafficData } from "../data";
+import { exportCsv } from "@/utils/csv";
 
 const dragModeStore = useDragModeStore();
 const colorMode = useColorMode();
+
+const selectedPeriod = ref("Today");
+const selectOptions = ["Today", "This week", "This month"];
+
+const handlePeriodChange = (period: string) => {
+  selectedPeriod.value = period;
+};
+
+const handleAction = (id: string) => {
+  if (id === "export") {
+    const exportData = providerTrafficData.map((item) => ({
+      provider: item.name,
+      traffic: item.value,
+    }));
+    exportCsv("provider-traffic.csv", exportData);
+  }
+};
 
 const chartData = computed(() => providerTrafficData.map((item) => item.value));
 const chartLabels = computed(() =>
@@ -87,6 +107,14 @@ const chartOptions = computed(() => {
         >
           <DragHandleDots16 />
         </div>
+        <template v-else>
+          <DashboardSelect
+            :value="selectedPeriod"
+            :onChange="handlePeriodChange"
+            :options="selectOptions"
+          />
+          <OptionsDropdown :onAction="handleAction" />
+        </template>
       </div>
     </div>
 
