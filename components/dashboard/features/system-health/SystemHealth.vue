@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import Card from "@/components/ui/card/Card.vue";
-import CardHeader from "@/components/ui/card/CardHeader.vue";
-import CardTitle from "@/components/ui/card/CardTitle.vue";
-import CardContent from "@/components/ui/card/CardContent.vue";
+import { ref } from "vue";
+import ServerStatistics from "./components/ServerStatistics/ServerStatistics.vue";
+import NetworkStatistics from "./components/NetworkStatistics/NetworkStatistics.vue";
+
+// Define sortable items
+const items = ref([
+  { id: "server-stats", className: "", component: "ServerStatistics" },
+  {
+    id: "system-network-stats",
+    className: "",
+    component: "NetworkStatistics",
+  },
+]);
 </script>
 
 <template>
-  <div class="grid gap-4">
-    <Card>
-      <CardHeader>
-        <CardTitle>System Health - Coming Soon</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p class="text-muted-foreground mb-4">
-          This section will include the following features:
-        </p>
-        <ul
-          class="list-disc list-inside space-y-2 text-sm text-muted-foreground"
-        >
-          <li>Server Statistics Dashboard</li>
-          <li>API Calls Today Metrics</li>
-          <li>Network Performance Monitoring</li>
-          <li>System Resource Usage</li>
-        </ul>
-      </CardContent>
-    </Card>
+  <div class="grid grid-cols-1 gap-6">
+    <div
+      v-for="item in items"
+      :key="item.id"
+      :class="item.className"
+      class="drag-item"
+    >
+      <ServerStatistics v-if="item.component === 'ServerStatistics'" />
+      <NetworkStatistics v-else-if="item.component === 'NetworkStatistics'" />
+    </div>
   </div>
 </template>
