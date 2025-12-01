@@ -50,7 +50,12 @@ const handleSortClick = () => {
 };
 
 const handleScroll = (event: Event) => {
-  emit("scroll");
+  const target = event.target as HTMLElement;
+  const bottomReached =
+    target.scrollHeight - target.scrollTop <= target.clientHeight + 50;
+  if (bottomReached) {
+    emit("scroll");
+  }
 };
 
 const visibleTopics = computed(() => {
@@ -77,9 +82,7 @@ const visibleTopics = computed(() => {
         @scroll="handleScroll"
       >
         <Table>
-          <TableHeader
-            class="sticky top-0 z-10 bg-header-bg dark:bg-header-bg-dark"
-          >
+          <TableHeader class="sticky top-0 z-10 bg-[#DADAFA] dark:bg-[#33445B]">
             <TableRow>
               <TableHead
                 role="button"

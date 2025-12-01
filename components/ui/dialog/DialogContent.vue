@@ -10,7 +10,7 @@ import {
   useForwardPropsEmits,
 } from "radix-vue";
 import { X } from "lucide-vue-next";
-import { cn } from "@/utils";
+import { cn } from "../../../utils";
 
 const props = defineProps<DialogContentProps & { class?: string }>();
 const emits = defineEmits<DialogContentEmits>();

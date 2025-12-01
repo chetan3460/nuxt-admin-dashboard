@@ -5,7 +5,7 @@ import {
   useForwardProps,
 } from "radix-vue";
 import { computed } from "vue";
-import { cn } from "@/utils";
+import { cn } from "../../../utils";
 
 const props = defineProps<DialogDescriptionProps & { class?: string }>();
 
