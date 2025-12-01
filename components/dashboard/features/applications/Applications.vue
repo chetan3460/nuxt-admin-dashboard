@@ -1,30 +1,40 @@
 <script setup lang="ts">
-import Card from "@/components/ui/card/Card.vue";
-import CardHeader from "@/components/ui/card/CardHeader.vue";
-import CardTitle from "@/components/ui/card/CardTitle.vue";
-import CardContent from "@/components/ui/card/CardContent.vue";
+import { ref } from "vue";
+import KafkaStatus from "./components/Kafka/KafkaStatus.vue";
+import DatabaseStatus from "./components/DatabaseStatus/DatabaseStatus.vue";
+import RedisStatus from "./components/RedisStatus/RedisStatus.vue";
+import WebserverStatus from "./components/WebserverStatus/WebserverStatus.vue";
+import ApplicationsComponent from "./components/Applications/ApplicationsComponent.vue";
+
+// Define sortable items
+const items = ref([
+  { id: "kafka-status", className: "", component: "KafkaStatus" },
+  { id: "database-status", className: "", component: "DatabaseStatus" },
+  { id: "redis-status", className: "", component: "RedisStatus" },
+  { id: "webserver-status", className: "", component: "WebserverStatus" },
+  {
+    id: "applications-status",
+    className: "",
+    component: "ApplicationsComponent",
+  },
+]);
 </script>
 
 <template>
-  <div class="grid gap-4">
-    <Card>
-      <CardHeader>
-        <CardTitle>Applications - Coming Soon</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p class="text-muted-foreground mb-4">
-          This section will include the following features:
-        </p>
-        <ul
-          class="list-disc list-inside space-y-2 text-sm text-muted-foreground"
-        >
-          <li>Kafka Status Monitoring</li>
-          <li>Database Status & Performance</li>
-          <li>Redis Status & Metrics</li>
-          <li>Webserver Status</li>
-          <li>Applications Overview Table</li>
-        </ul>
-      </CardContent>
-    </Card>
+  <div class="grid grid-cols-1 gap-4">
+    <div
+      v-for="item in items"
+      :key="item.id"
+      :class="item.className"
+      class="drag-item"
+    >
+      <KafkaStatus v-if="item.component === 'KafkaStatus'" />
+      <DatabaseStatus v-else-if="item.component === 'DatabaseStatus'" />
+      <RedisStatus v-else-if="item.component === 'RedisStatus'" />
+      <WebserverStatus v-else-if="item.component === 'WebserverStatus'" />
+      <ApplicationsComponent
+        v-else-if="item.component === 'ApplicationsComponent'"
+      />
+    </div>
   </div>
 </template>
