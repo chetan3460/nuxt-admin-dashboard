@@ -20,8 +20,8 @@ import SortableHeaderCell from "../shared/SortableHeaderCell.vue";
 import ToastContainer from "./components/ToastContainer.vue";
 import TopicDialog from "./components/TopicDialog.vue";
 import { exportCsv } from "@/utils/csv";
-import { kafkaData, MEMORY_THRESHOLD, THREADS_THRESHOLD } from "./data";
-import { columns } from "./config";
+import { kafkaData, MEMORY_THRESHOLD, THREADS_THRESHOLD } from "./kafka-data";
+import { columns } from "./kafka-config";
 import { useKafkaToasts } from "./composables/useKafkaToasts";
 
 const dragModeStore = useDragModeStore();
