@@ -171,129 +171,133 @@ const handleTopicScroll = () => {
 </script>
 
 <template>
-  <Card
-    class="h-full flex flex-col"
+  <div
     :class="{
-      'border-2 border-dashed border-primary': dragModeStore.isGlobalDragMode,
+      'border-2 border-dashed border-primary p-2 rounded-20':
+        dragModeStore.isEnabled,
     }"
   >
-    <div class="flex items-center justify-between">
-      <CardHeader>
-        <div class="flex items-center gap-2">
-          <DragHandleDots16
-            v-if="dragModeStore.isGlobalDragMode"
-            class="cursor-grab active:cursor-grabbing text-muted-foreground"
-          />
-          <CardTitle class="text-xl font-semibold flex items-center gap-2">
-            Kafka
-            <svg
-              v-if="hasWarning"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-            >
-              <path
-                d="M8 14.6667C11.6819 14.6667 14.6667 11.6819 14.6667 8C14.6667 4.3181 11.6819 1.33334 8 1.33334C4.3181 1.33334 1.33334 4.3181 1.33334 8C1.33334 11.6819 4.3181 14.6667 8 14.6667Z"
-                fill="#F04438"
-                fill-opacity="0.3"
-                stroke="#F04438"
-                stroke-width="1.33333"
-              />
-              <path
-                d="M8 8V4.66666M8 11.3333H8.00667"
-                stroke="#F04438"
-                stroke-width="1.33333"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </CardTitle>
-        </div>
-        <CardDescription>
-          Last updated ({{ new Date().toLocaleTimeString() }})
-        </CardDescription>
-      </CardHeader>
-      <div class="pr-6">
-        <OptionsDropdown @action="handleAction" />
-      </div>
-    </div>
-
-    <CardContent class="flex-1 min-h-0 overflow-hidden p-0">
-      <div class="h-full flex flex-col">
-        <div class="overflow-auto" :class="{ 'pr-2': isScrollable }">
-          <Table>
-            <TableHeader
-              class="sticky top-0 z-10 bg-header-bg dark:bg-header-bg-dark"
-            >
-              <TableRow>
-                <SortableHeaderCell
-                  v-for="col in Object.values(columns)"
-                  :key="col.key"
-                  :label="col.label"
-                  :column-key="col.key"
-                  :sort-key="sortKey"
-                  :sort-dir="sortDir"
-                  @sort="handleSort"
-                />
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow
-                v-for="(row, i) in sortedRows"
-                :key="row.name"
-                class="cursor-pointer hover:bg-muted/50 transition-colors"
-                :class="{
-                  'bg-destructive-foreground/10 dark:bg-red-950/20':
-                    row.status === 'Inactive',
-                }"
-                @click="handleRowClick(i)"
+    <Card class="h-full flex flex-col">
+      <div class="flex items-center justify-between">
+        <CardHeader>
+          <div class="flex items-center gap-2">
+            <DragHandleDots16
+              v-if="dragModeStore.isEnabled"
+              class="cursor-grab active:cursor-grabbing text-muted-foreground"
+            />
+            <CardTitle class="text-xl font-semibold flex items-center gap-2">
+              Kafka
+              <svg
+                v-if="hasWarning"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
               >
-                <TableCell>
-                  <span class="inline-flex items-center gap-1 text-primary">
-                    {{ row.name }}
-                    <CriticalBadge
-                      v-if="
-                        row.memory >= MEMORY_THRESHOLD ||
-                        row.threads >= THREADS_THRESHOLD
-                      "
-                    />
-                  </span>
-                </TableCell>
-                <TableCell class="text-default-900">{{ row.host }}</TableCell>
-                <TableCell>{{ formatFixed(row.cpu, 2) }}</TableCell>
-                <TableCell
-                  :class="{
-                    'text-destructive font-bold':
-                      row.memory >= MEMORY_THRESHOLD,
-                  }"
-                >
-                  {{ formatFixed(row.memory, 1) }}
-                </TableCell>
-                <TableCell
-                  :class="{
-                    'text-destructive font-bold':
-                      row.threads >= THREADS_THRESHOLD,
-                  }"
-                >
-                  {{ formatInteger(row.threads) }}
-                </TableCell>
-                <TableCell>{{ formatInteger(row.connections) }}</TableCell>
-                <TableCell>{{ formatFixed(row.heapMb, 0) }}</TableCell>
-                <TableCell>{{ row.topicHealth }}</TableCell>
-                <TableCell>
-                  <Badge :color="getStatusColor(row.status)">
-                    {{ row.status }}
-                  </Badge>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+                <path
+                  d="M8 14.6667C11.6819 14.6667 14.6667 11.6819 14.6667 8C14.6667 4.3181 11.6819 1.33334 8 1.33334C4.3181 1.33334 1.33334 4.3181 1.33334 8C1.33334 11.6819 4.3181 14.6667 8 14.6667Z"
+                  fill="#F04438"
+                  fill-opacity="0.3"
+                  stroke="#F04438"
+                  stroke-width="1.33333"
+                />
+                <path
+                  d="M8 8V4.66666M8 11.3333H8.00667"
+                  stroke="#F04438"
+                  stroke-width="1.33333"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </CardTitle>
+          </div>
+          <CardDescription>
+            Last updated ({{ new Date().toLocaleTimeString() }})
+          </CardDescription>
+        </CardHeader>
+        <div class="pr-6">
+          <OptionsDropdown @action="handleAction" />
         </div>
       </div>
-    </CardContent>
-  </Card>
+
+      <CardContent class="flex-1 min-h-0 overflow-hidden p-0">
+        <div class="h-full flex flex-col">
+          <div class="overflow-auto" :class="{ 'pr-2': isScrollable }">
+            <Table>
+              <TableHeader
+                class="sticky top-0 z-10 bg-header-bg dark:bg-header-bg-dark"
+              >
+                <TableRow>
+                  <SortableHeaderCell
+                    v-for="col in Object.values(columns)"
+                    :key="col.key"
+                    :label="col.label"
+                    :column-key="col.key"
+                    :sort-key="sortKey"
+                    :sort-dir="sortDir"
+                    @sort="handleSort"
+                  />
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow
+                  v-for="(row, i) in sortedRows"
+                  :key="row.name"
+                  class="cursor-pointer hover:bg-muted/50 transition-colors"
+                  :class="{
+                    'bg-destructive-foreground/10 dark:bg-red-950/20':
+                      row.status === 'Inactive',
+                  }"
+                  @click="handleRowClick(i)"
+                >
+                  <TableCell>
+                    <span class="inline-flex items-center gap-1 text-primary">
+                      {{ row.name }}
+                      <CriticalBadge
+                        v-if="
+                          row.memory >= MEMORY_THRESHOLD ||
+                          row.threads >= THREADS_THRESHOLD
+                        "
+                      />
+                    </span>
+                  </TableCell>
+                  <TableCell class="text-default-900 dark:text-white">{{
+                    row.host
+                  }}</TableCell>
+                  <TableCell>{{ formatFixed(row.cpu, 2) }}</TableCell>
+                  <TableCell
+                    :class="{
+                      'text-destructive font-bold':
+                        row.memory >= MEMORY_THRESHOLD,
+                    }"
+                  >
+                    {{ formatFixed(row.memory, 1) }}
+                  </TableCell>
+                  <TableCell
+                    :class="{
+                      'text-destructive font-bold':
+                        row.threads >= THREADS_THRESHOLD,
+                    }"
+                  >
+                    {{ formatInteger(row.threads) }}
+                  </TableCell>
+                  <TableCell>{{ formatInteger(row.connections) }}</TableCell>
+                  <TableCell>{{ formatFixed(row.heapMb, 0) }}</TableCell>
+                  <TableCell>{{ row.topicHealth }}</TableCell>
+                  <TableCell>
+                    <Badge :color="getStatusColor(row.status)">
+                      {{ row.status }}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  </div>
 
   <!-- Toast notifications -->
   <ToastContainer

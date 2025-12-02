@@ -90,7 +90,12 @@ const chartOptions = computed(() => {
 </script>
 
 <template>
-  <Card class="h-full flex flex-col">
+  <div
+    :class="{
+      'border-2 border-dashed border-primary p-2 rounded-20': dragModeStore.isEnabled,
+    }"
+  >
+    <Card class="h-full flex flex-col">
     <div
       class="flex lg:items-center justify-between lg:flex-row flex-col gap-2"
     >
@@ -131,4 +136,5 @@ const chartOptions = computed(() => {
       </div>
     </CardContent>
   </Card>
+  </div>
 </template>

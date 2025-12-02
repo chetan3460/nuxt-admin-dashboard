@@ -102,150 +102,159 @@ const toggleRow = (name: string) => {
 </script>
 
 <template>
-  <Card
-    class="h-full flex flex-col"
+  <div
     :class="{
-      'border-2 border-dashed border-primary': dragModeStore.isGlobalDragMode,
+      'border-2 border-dashed border-primary p-2 rounded-20':
+        dragModeStore.isEnabled,
     }"
   >
-    <div class="flex items-center justify-between">
-      <CardHeader>
-        <CardTitle>Database</CardTitle>
-        <CardDescription>
-          Last updated ({{ databaseData.lastUpdated }})
-        </CardDescription>
-      </CardHeader>
-      <div
-        v-if="dragModeStore.isGlobalDragMode"
-        class="cursor-grab flex items-center"
-      >
-        <DragHandleDots16 />
+    <Card class="h-full flex flex-col">
+      <div class="flex items-center justify-between">
+        <CardHeader>
+          <CardTitle>Database</CardTitle>
+          <CardDescription>
+            Last updated ({{ databaseData.lastUpdated }})
+          </CardDescription>
+        </CardHeader>
+        <div
+          v-if="dragModeStore.isEnabled"
+          class="cursor-grab flex items-center"
+        >
+          <DragHandleDots16 />
+        </div>
+        <OptionsDropdown v-else :onAction="handleAction" />
       </div>
-      <OptionsDropdown v-else :onAction="handleAction" />
-    </div>
 
-    <CardContent class="flex-1 flex flex-col gap-6">
-      <!-- Main Database Table -->
-      <div class="overflow-hidden">
-        <div :class="isScrollable ? 'max-h-72 overflow-y-auto' : ''">
-          <Table>
-            <TableHeader
-              class="sticky top-0 z-10 bg-header-bg dark:bg-header-bg-dark"
-            >
-              <TableRow>
-                <SortableHeaderCell
-                  v-for="col in Object.values(columns)"
-                  :key="col.key"
-                  :label="col.label"
-                  :column-key="col.key"
-                  :sort-key="sortKey"
-                  :sort-dir="sortDir"
-                  @sort="handleSort"
-                />
-              </TableRow>
-            </TableHeader>
-
-            <TableBody>
-              <template v-for="(row, idx) in sortedRows" :key="row.name ?? idx">
-                <TableRow
-                  :class="{
-                    'bg-destructive-foreground/10 dark:bg-red-950/20':
-                      row.status === 'Inactive',
-                  }"
-                >
-                  <TableCell>
-                    <button
-                      @click="toggleRow(row.name)"
-                      class="text-primary hover:underline inline-flex items-center gap-1"
-                    >
-                      {{ row.name }}
-                      <CriticalBadge v-if="row.exceededThreshold" />
-                    </button>
-                  </TableCell>
-                  <TableCell class="text-default-900">{{ row.host }}</TableCell>
-                  <TableCell>{{ formatFixed(row.cpu, 1) }}</TableCell>
-                  <TableCell>{{ formatFixed(row.memory, 1) }}</TableCell>
-                  <TableCell>{{ formatInteger(row.connections) }}</TableCell>
-                  <TableCell>
-                    <Badge :color="getStatusColor(row.status)">
-                      {{ row.status }}
-                    </Badge>
-                  </TableCell>
+      <CardContent class="flex-1 flex flex-col gap-6">
+        <!-- Main Database Table -->
+        <div class="overflow-hidden">
+          <div :class="isScrollable ? 'max-h-72 overflow-y-auto' : ''">
+            <Table>
+              <TableHeader
+                class="sticky top-0 z-10 bg-header-bg dark:bg-header-bg-dark"
+              >
+                <TableRow>
+                  <SortableHeaderCell
+                    v-for="col in Object.values(columns)"
+                    :key="col.key"
+                    :label="col.label"
+                    :column-key="col.key"
+                    :sort-key="sortKey"
+                    :sort-dir="sortDir"
+                    @sort="handleSort"
+                  />
                 </TableRow>
+              </TableHeader>
 
-                <!-- I/O Details Row -->
-                <TableRow v-if="openKey === row.name">
-                  <TableCell :colspan="6" class="p-0">
-                    <div class="bg-[#DDDCF933]">
-                      <div class="flex flex-col gap-1 border-b px-4 py-3">
-                        <div class="text-xs font-medium flex items-center">
-                          I/O DB details
-                          <CriticalBadge
-                            v-if="
-                              ioDetails.database.some(
-                                (d) =>
-                                  d.type === 'Output DB' &&
-                                  Number(d.records) >= 1000000
-                              )
-                            "
-                            class="ml-1"
-                          />
-                        </div>
-                        <div class="text-xs text-default-600">
-                          Last updated: {{ ioDetails.lastUpdated }}
-                        </div>
-                      </div>
-                      <Table>
-                        <TableHeader
-                          class="bg-[#F2F2FF] dark:bg-primary/10 rounded-[3px]"
-                        >
-                          <TableRow>
-                            <TableHead class="p-3">Type</TableHead>
-                            <TableHead class="p-3">Name</TableHead>
-                            <TableHead class="p-3 text-right"
-                              >No. of records</TableHead
-                            >
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          <TableRow
-                            v-for="d in ioDetails.database"
-                            :key="`${d.type}-${d.name}`"
-                            :class="{
-                              'bg-destructive-foreground/10 dark:bg-red-950/20':
-                                d.type === 'Output DB' &&
-                                Number(d.records) >= 1000000,
-                            }"
-                          >
-                            <TableCell class="text-default-900">
-                              <span class="inline-flex items-center">
-                                {{ d.type }}
-                                <CriticalBadge
-                                  v-if="
+              <TableBody>
+                <template
+                  v-for="(row, idx) in sortedRows"
+                  :key="row.name ?? idx"
+                >
+                  <TableRow
+                    :class="{
+                      'bg-destructive-foreground/10 dark:bg-red-950/20':
+                        row.status === 'Inactive',
+                    }"
+                  >
+                    <TableCell>
+                      <button
+                        @click="toggleRow(row.name)"
+                        class="text-primary hover:underline inline-flex items-center gap-1"
+                      >
+                        {{ row.name }}
+                        <CriticalBadge v-if="row.exceededThreshold" />
+                      </button>
+                    </TableCell>
+                    <TableCell class="text-default-900 dark:text-white">{{
+                      row.host
+                    }}</TableCell>
+                    <TableCell>{{ formatFixed(row.cpu, 1) }}</TableCell>
+                    <TableCell>{{ formatFixed(row.memory, 1) }}</TableCell>
+                    <TableCell>{{ formatInteger(row.connections) }}</TableCell>
+                    <TableCell>
+                      <Badge :color="getStatusColor(row.status)">
+                        {{ row.status }}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+
+                  <!-- I/O Details Row -->
+                  <TableRow v-if="openKey === row.name">
+                    <TableCell :colspan="6" class="p-0">
+                      <div class="bg-[#DDDCF933]">
+                        <div class="flex flex-col gap-1 border-b px-4 py-3">
+                          <div class="text-xs font-medium flex items-center">
+                            I/O DB details
+                            <CriticalBadge
+                              v-if="
+                                ioDetails.database.some(
+                                  (d) =>
                                     d.type === 'Output DB' &&
                                     Number(d.records) >= 1000000
-                                  "
-                                  class="ml-1"
-                                />
-                              </span>
-                            </TableCell>
-                            <TableCell class="font-medium">{{
-                              d.name
-                            }}</TableCell>
-                            <TableCell class="text-right">
-                              {{ Number(d.records).toLocaleString() }}
-                            </TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              </template>
-            </TableBody>
-          </Table>
+                                )
+                              "
+                              class="ml-1"
+                            />
+                          </div>
+                          <div class="text-xs text-default-600">
+                            Last updated: {{ ioDetails.lastUpdated }}
+                          </div>
+                        </div>
+                        <Table>
+                          <TableHeader
+                            class="bg-[#F2F2FF] dark:bg-primary/10 rounded-[3px]"
+                          >
+                            <TableRow>
+                              <TableHead class="p-3">Type</TableHead>
+                              <TableHead class="p-3">Name</TableHead>
+                              <TableHead class="p-3 text-right"
+                                >No. of records</TableHead
+                              >
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            <TableRow
+                              v-for="d in ioDetails.database"
+                              :key="`${d.type}-${d.name}`"
+                              :class="{
+                                'bg-destructive-foreground/10 dark:bg-red-950/20':
+                                  d.type === 'Output DB' &&
+                                  Number(d.records) >= 1000000,
+                              }"
+                            >
+                              <TableCell
+                                class="text-default-900 dark:text-white"
+                              >
+                                <span class="inline-flex items-center">
+                                  {{ d.type }}
+                                  <CriticalBadge
+                                    v-if="
+                                      d.type === 'Output DB' &&
+                                      Number(d.records) >= 1000000
+                                    "
+                                    class="ml-1"
+                                  />
+                                </span>
+                              </TableCell>
+                              <TableCell class="font-medium">{{
+                                d.name
+                              }}</TableCell>
+                              <TableCell class="text-right">
+                                {{ Number(d.records).toLocaleString() }}
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                </template>
+              </TableBody>
+            </Table>
+          </div>
         </div>
-      </div>
-    </CardContent>
-  </Card>
+      </CardContent>
+    </Card>
+  </div>
 </template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { useColorMode } from "@vueuse/core";
 import Card from "@/components/ui/card/Card.vue";
 import CardContent from "@/components/ui/card/CardContent.vue";
 import CardHeader from "@/components/ui/card/CardHeader.vue";
@@ -23,6 +24,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: "periodChange", period: string): void;
 }>();
+
+const colorMode = useColorMode();
 
 const handleAction = (id: string) => {
   if (id === "export") {
@@ -53,99 +56,140 @@ const series = computed(() => [
   },
 ]);
 
-const chartOptions = computed(() => ({
-  chart: {
-    type: "line",
-    toolbar: {
-      show: false,
-    },
-    zoom: {
-      enabled: false,
-    },
-  },
-  colors: ["#2563eb", "#16a34a", "#dc2626", "#ca8a04"], // Blue, Green, Red, Yellow
-  dataLabels: {
-    enabled: false,
-  },
-  stroke: {
-    curve: "smooth",
-    width: 2,
-  },
-  xaxis: {
-    categories: chartData.value.map((d) => d.time),
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
-  },
-  yaxis: {
-    labels: {
-      formatter: (value: number) => {
-        if (value >= 1000) return `${(value / 1000).toFixed(0)}k`;
-        return value;
+const chartOptions = computed(() => {
+  const isDark = colorMode.value === "dark";
+
+  return {
+    chart: {
+      type: "line",
+      toolbar: {
+        show: true,
+      },
+      zoom: {
+        enabled: false,
       },
     },
-  },
-  grid: {
-    borderColor: "#f1f5f9",
-    strokeDashArray: 4,
-  },
-  legend: {
-    position: "top",
-    horizontalAlign: "right",
-  },
-  tooltip: {
-    theme: "light",
-  },
-}));
+    colors: ["#2563eb", "#16a34a", "#dc2626", "#ca8a04"], // Blue, Green, Red, Yellow
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: "smooth",
+      width: 2,
+    },
+    xaxis: {
+      categories: chartData.value.map((d) => d.time),
+      labels: {
+        style: {
+          colors: isDark ? "#E5E5E5" : "#111827",
+        },
+      },
+      axisBorder: {
+        show: true,
+        color: isDark ? "#9CA3AF" : "#4B5563",
+      },
+      axisTicks: {
+        show: true,
+        color: isDark ? "#9CA3AF" : "#4B5563",
+      },
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: isDark ? "#E5E5E5" : "#111827",
+        },
+        formatter: (value: number) => {
+          if (value >= 1000) return `${(value / 1000).toFixed(0)}k`;
+          return value;
+        },
+      },
+      axisBorder: {
+        show: true,
+        color: isDark ? "#9CA3AF" : "#4B5563",
+      },
+      axisTicks: {
+        show: true,
+        color: isDark ? "#9CA3AF" : "#4B5563",
+      },
+    },
+    grid: {
+      borderColor: isDark ? "#374151" : "#E5E7EB",
+      strokeDashArray: 4,
+      yaxis: {
+        lines: {
+          show: true,
+        },
+      },
+      xaxis: {
+        lines: {
+          show: true,
+        },
+      },
+    },
+    legend: {
+      position: "top",
+      horizontalAlign: "right",
+      labels: {
+        colors: isDark ? "#E5E5E5" : "#111827",
+      },
+    },
+    tooltip: {
+      theme: isDark ? "dark" : "light",
+    },
+  };
+});
 </script>
 
 <template>
-  <Card class="h-full flex flex-col">
-    <div class="flex items-center justify-between">
-      <CardHeader>
-        <CardTitle>Overall SMS volume</CardTitle>
-        <CardDescription>
-          Last updated ({ smsData?.lastUpdated || "N/A" })
-        </CardDescription>
-      </CardHeader>
-      <div class="flex items-center gap-2">
+  <div
+    :class="{
+      'border-2 border-dashed border-primary p-2 rounded-20': isDraggable,
+    }"
+  >
+    <Card class="h-full flex flex-col">
+      <div class="flex items-center justify-between">
+        <CardHeader>
+          <CardTitle>Overall SMS volume</CardTitle>
+          <CardDescription>
+            Last updated ({ smsData?.lastUpdated || "N/A" })
+          </CardDescription>
+        </CardHeader>
+        <div class="flex items-center gap-2">
+          <div
+            v-if="isDraggable"
+            class="cursor-grab flex items-center opacity-75 hover:opacity-100"
+          >
+            <DragHandleDots16 />
+          </div>
+          <div v-else class="flex items-center gap-2">
+            <DashboardSelect
+              :value="selectedPeriod"
+              :onChange="(val) => emit('periodChange', val)"
+              :options="selectOptions"
+            />
+            <OptionsDropdown :onAction="handleAction" />
+          </div>
+        </div>
+      </div>
+      <CardContent class="flex-1 flex flex-col justify-between">
+        <div class="relative w-full h-[300px]">
+          <ClientOnly>
+            <apexchart
+              type="line"
+              height="100%"
+              :options="chartOptions"
+              :series="series"
+            ></apexchart>
+          </ClientOnly>
+        </div>
         <div
-          v-if="isDraggable"
-          class="cursor-grab flex items-center opacity-75 hover:opacity-100"
+          class="py-1 px-2 bg-[#E2F5FD] dark:bg-[#0D475F] rounded-[8px] inline-block max-w-max mt-4"
         >
-          <DragHandleDots16 />
+          <p class="text-xs font-medium text-[#0067B1] dark:text-[#149BFC]">
+            Peak traffic at 5 pm as expected
+          </p>
         </div>
-        <div v-else class="flex items-center gap-2">
-          <DashboardSelect
-            :value="selectedPeriod"
-            :onChange="(val) => emit('periodChange', val)"
-            :options="selectOptions"
-          />
-          <OptionsDropdown :onAction="handleAction" />
-        </div>
-      </div>
-    </div>
-    <CardContent class="flex-1 flex flex-col justify-between">
-      <div class="relative w-full h-[300px]">
-        <ClientOnly>
-          <apexchart
-            type="line"
-            height="100%"
-            :options="chartOptions"
-            :series="series"
-          ></apexchart>
-        </ClientOnly>
-      </div>
-      <div
-        class="py-1 px-2 bg-[#E2F5FD] dark:bg-[#0D475F] rounded-[8px] inline-block max-w-max mt-4"
-      >
-        <p class="text-xs font-medium text-[#0067B1] dark:text-[#149BFC]">
-          Peak traffic at 5 pm as expected
-        </p>
-      </div>
-    </CardContent>
-  </Card>
+      </CardContent>
+    </Card>
+  </div>
 </template>

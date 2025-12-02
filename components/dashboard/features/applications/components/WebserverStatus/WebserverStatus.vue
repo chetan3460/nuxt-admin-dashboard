@@ -85,73 +85,77 @@ const isScrollable = computed(() => sortedRows.value.length > 6);
 
 <template>
   <template>
-    <Card
-      class="h-full flex flex-col"
+    <div
       :class="{
-        'border-2 border-dashed border-primary': dragModeStore.isGlobalDragMode,
+        'border-2 border-dashed border-primary p-2 rounded-20':
+          dragModeStore.isGlobalDragMode,
       }"
     >
-      <div class="flex items-center justify-between">
-        <CardHeader>
-          <CardTitle>Webserver</CardTitle>
-          <CardDescription>
-            Last updated ({{ webservers.lastUpdated }})
-          </CardDescription>
-        </CardHeader>
-        <div
-          v-if="dragModeStore.isGlobalDragMode"
-          class="cursor-grab flex items-center"
-        >
-          <DragHandleDots16 />
-        </div>
-        <OptionsDropdown v-else :onAction="handleAction" />
-      </div>
-
-      <CardContent class="flex-1">
-        <div class="overflow-hidden">
-          <div :class="isScrollable ? 'max-h-72 overflow-y-auto' : ''">
-            <Table>
-              <TableHeader
-                class="sticky top-0 z-10 bg-header-bg dark:bg-header-bg-dark"
-              >
-                <TableRow>
-                  <SortableHeaderCell
-                    v-for="col in Object.values(columns)"
-                    :key="col.key"
-                    :label="col.label"
-                    :column-key="col.key"
-                    :sort-key="sortKey"
-                    :sort-dir="sortDir"
-                    @sort="handleSort"
-                  />
-                </TableRow>
-              </TableHeader>
-
-              <TableBody>
-                <TableRow
-                  v-for="(row, idx) in sortedRows"
-                  :key="row.service ?? idx"
-                  :class="{
-                    'bg-destructive-foreground/10 dark:bg-red-950/20':
-                      row.status === 'Inactive',
-                  }"
-                >
-                  <TableCell class="font-medium text-primary">{{
-                    row.service
-                  }}</TableCell>
-                  <TableCell class="text-default-900">{{ row.host }}</TableCell>
-                  <TableCell>{{ row.statusCode }}</TableCell>
-                  <TableCell>
-                    <Badge :color="getStatusColor(row.status)">
-                      {{ row.status }}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+      <Card class="h-full flex flex-col">
+        <div class="flex items-center justify-between">
+          <CardHeader>
+            <CardTitle>Webserver</CardTitle>
+            <CardDescription>
+              Last updated ({{ webservers.lastUpdated }})
+            </CardDescription>
+          </CardHeader>
+          <div
+            v-if="dragModeStore.isGlobalDragMode"
+            class="cursor-grab flex items-center"
+          >
+            <DragHandleDots16 />
           </div>
+          <OptionsDropdown v-else :onAction="handleAction" />
         </div>
-      </CardContent>
-    </Card>
+
+        <CardContent class="flex-1">
+          <div class="overflow-hidden">
+            <div :class="isScrollable ? 'max-h-72 overflow-y-auto' : ''">
+              <Table>
+                <TableHeader
+                  class="sticky top-0 z-10 bg-header-bg dark:bg-header-bg-dark"
+                >
+                  <TableRow>
+                    <SortableHeaderCell
+                      v-for="col in Object.values(columns)"
+                      :key="col.key"
+                      :label="col.label"
+                      :column-key="col.key"
+                      :sort-key="sortKey"
+                      :sort-dir="sortDir"
+                      @sort="handleSort"
+                    />
+                  </TableRow>
+                </TableHeader>
+
+                <TableBody>
+                  <TableRow
+                    v-for="(row, idx) in sortedRows"
+                    :key="row.service ?? idx"
+                    :class="{
+                      'bg-destructive-foreground/10 dark:bg-red-950/20':
+                        row.status === 'Inactive',
+                    }"
+                  >
+                    <TableCell class="font-medium text-primary">{{
+                      row.service
+                    }}</TableCell>
+                    <TableCell class="text-default-900 dark:text-white">{{
+                      row.host
+                    }}</TableCell>
+                    <TableCell>{{ row.statusCode }}</TableCell>
+                    <TableCell>
+                      <Badge :color="getStatusColor(row.status)">
+                        {{ row.status }}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   </template>
 </template>

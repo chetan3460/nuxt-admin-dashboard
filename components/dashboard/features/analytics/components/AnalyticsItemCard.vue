@@ -11,32 +11,40 @@ defineProps<{
 
 <template>
   <div
-    class="rounded-20 p-4 bg-card shadow transition-all duration-300 group relative h-full"
-    :class="{ 'border-2 border-dashed border-primary': isDraggable }"
+    :class="{
+      'border-2 border-dashed border-primary p-2 rounded-20': isDraggable,
+    }"
+    class="h-full"
   >
-    <!-- Drag handle -->
     <div
-      v-if="isDraggable"
-      class="drag-handle absolute top-2 right-2 z-10 opacity-75 hover:opacity-100 transition-opacity cursor-grab"
+      class="rounded-20 p-4 bg-card shadow transition-all duration-300 group relative h-full"
     >
-      <DragHandleDots16 />
+      <!-- Drag handle -->
+      <div
+        v-if="isDraggable"
+        class="drag-handle absolute top-2 right-2 z-10 opacity-75 hover:opacity-100 transition-opacity cursor-grab"
+      >
+        <DragHandleDots16 />
+      </div>
+
+      <!-- Title -->
+      <div class="text-xs font-semibold text-default-600 dark:text-default-400">
+        {{ data.title }}
+      </div>
+
+      <!-- Main content -->
+      <GaugeCard
+        v-if="data.type === 'gauge'"
+        :title="data.title"
+        :value="data.value"
+      />
+      <MetricCard
+        v-else
+        :value="data.value"
+        :trend="data.trend"
+        :change="data.change"
+        :color="data.color"
+      />
     </div>
-
-    <!-- Title -->
-    <div class="text-xs font-semibold text-default-600">{{ data.title }}</div>
-
-    <!-- Main content -->
-    <GaugeCard
-      v-if="data.type === 'gauge'"
-      :title="data.title"
-      :value="data.value"
-    />
-    <MetricCard
-      v-else
-      :value="data.value"
-      :trend="data.trend"
-      :change="data.change"
-      :color="data.color"
-    />
   </div>
 </template>

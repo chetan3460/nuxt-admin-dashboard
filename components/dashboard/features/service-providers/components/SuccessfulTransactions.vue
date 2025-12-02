@@ -93,10 +93,12 @@ const chartOptions = computed(() => {
         },
       },
       axisBorder: {
-        color: "#666",
+        show: true,
+        color: isDark ? "#9CA3AF" : "#4B5563",
       },
       axisTicks: {
-        color: "#666",
+        show: true,
+        color: isDark ? "#9CA3AF" : "#4B5563",
       },
     },
     yaxis: {
@@ -111,7 +113,7 @@ const chartOptions = computed(() => {
       },
     },
     grid: {
-      borderColor: isDark ? "#374151" : "#DADADA",
+      borderColor: isDark ? "#374151" : "#E5E7EB",
       strokeDashArray: 3,
     },
     markers: {
@@ -134,45 +136,54 @@ const chartOptions = computed(() => {
 </script>
 
 <template>
-  <Card class="h-full flex flex-col">
-    <div class="flex items-center justify-between">
-      <CardHeader>
-        <CardTitle>Successful transactions today</CardTitle>
-        <CardDescription>
-          Last updated ({{ successfulTransactionsRaw.lastUpdated }})
-        </CardDescription>
-      </CardHeader>
-      <div class="flex items-center gap-2">
-        <div
-          v-if="dragModeStore.isEnabled"
-          class="cursor-grab flex items-center drag-handle"
-        >
-          <DragHandleDots16 />
+  <div
+    :class="{
+      'border-2 border-dashed border-primary p-2 rounded-20':
+        dragModeStore.isEnabled,
+    }"
+  >
+    <Card class="h-full flex flex-col">
+      <div class="flex items-center justify-between">
+        <CardHeader>
+          <CardTitle>Successful transactions today</CardTitle>
+          <CardDescription>
+            Last updated ({{ successfulTransactionsRaw.lastUpdated }})
+          </CardDescription>
+        </CardHeader>
+        <div class="flex items-center gap-2">
+          <div
+            v-if="dragModeStore.isEnabled"
+            class="cursor-grab flex items-center drag-handle"
+          >
+            <DragHandleDots16 />
+          </div>
+          <template v-else>
+            <DashboardSelect
+              :value="selectedPeriod"
+              :onChange="handlePeriodChange"
+              :options="selectOptions"
+            />
+            <OptionsDropdown :onAction="handleAction" />
+          </template>
         </div>
-        <template v-else>
-          <DashboardSelect
-            :value="selectedPeriod"
-            :onChange="handlePeriodChange"
-            :options="selectOptions"
-          />
-          <OptionsDropdown :onAction="handleAction" />
-        </template>
       </div>
-    </div>
 
-    <CardContent class="flex-1 flex flex-col">
-      <div
-        :style="{ height: typeof height === 'number' ? `${height}px` : height }"
-      >
-        <ClientOnly>
-          <apexchart
-            type="bar"
-            height="100%"
-            :options="chartOptions"
-            :series="chartSeries"
-          />
-        </ClientOnly>
-      </div>
-    </CardContent>
-  </Card>
+      <CardContent class="flex-1 flex flex-col">
+        <div
+          :style="{
+            height: typeof height === 'number' ? `${height}px` : height,
+          }"
+        >
+          <ClientOnly>
+            <apexchart
+              type="bar"
+              height="100%"
+              :options="chartOptions"
+              :series="chartSeries"
+            />
+          </ClientOnly>
+        </div>
+      </CardContent>
+    </Card>
+  </div>
 </template>

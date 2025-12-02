@@ -55,74 +55,83 @@ const handleAction = (id: string) => {
 </script>
 
 <template>
-  <Card class="h-full flex flex-col">
-    <div class="flex items-center justify-between mb-2">
-      <CardHeader>
-        <CardTitle>Service provider status</CardTitle>
-        <CardDescription>
-          Last updated ({{ providerStatus.lastUpdated }})
-        </CardDescription>
-      </CardHeader>
-      <div class="flex items-center gap-2">
-        <div
-          v-if="dragModeStore.isEnabled"
-          class="cursor-grab flex items-center drag-handle"
-        >
-          <DragHandleDots16 />
+  <div
+    :class="{
+      'border-2 border-dashed border-primary p-2 rounded-20':
+        dragModeStore.isEnabled,
+    }"
+  >
+    <Card class="h-full flex flex-col">
+      <div class="flex items-center justify-between mb-2">
+        <CardHeader>
+          <CardTitle>Service provider status</CardTitle>
+          <CardDescription>
+            Last updated ({{ providerStatus.lastUpdated }})
+          </CardDescription>
+        </CardHeader>
+        <div class="flex items-center gap-2">
+          <div
+            v-if="dragModeStore.isEnabled"
+            class="cursor-grab flex items-center drag-handle"
+          >
+            <DragHandleDots16 />
+          </div>
+          <template v-else>
+            <DashboardSelect
+              :value="selectedPeriod"
+              :onChange="handlePeriodChange"
+              :options="selectOptions"
+            />
+            <OptionsDropdown :onAction="handleAction" />
+          </template>
         </div>
-        <template v-else>
-          <DashboardSelect
-            :value="selectedPeriod"
-            :onChange="handlePeriodChange"
-            :options="selectOptions"
-          />
-          <OptionsDropdown :onAction="handleAction" />
-        </template>
       </div>
-    </div>
 
-    <!-- Providers with custom scrollbar -->
-    <CardContent class="flex-1 flex flex-col">
-      <div
-        class="overflow-y-auto space-y-3 pr-2"
-        :style="{ maxHeight: `${PROVIDER_STATUS_CONFIG.scrollMaxHeight}px` }"
-      >
+      <!-- Providers with custom scrollbar -->
+      <CardContent class="flex-1 flex flex-col">
         <div
-          v-for="(item, index) in statusList"
-          :key="index"
-          class="flex items-center justify-between py-3 gap-5 border-b border-b-[#F1F1F1] dark:border-b-[#374151] last:border-0"
+          class="overflow-y-auto space-y-3 pr-2"
+          :style="{ maxHeight: `${PROVIDER_STATUS_CONFIG.scrollMaxHeight}px` }"
         >
-          <div class="flex items-center space-x-3">
-            <div
-              :class="[
-                'w-[6px] h-[6px] rounded-full',
-                item.status === 1
-                  ? PROVIDER_STATUS_CONFIG.dot.active
-                  : PROVIDER_STATUS_CONFIG.dot.inactive,
-              ]"
-            ></div>
-            <span class="font-medium text-sm text-default-900">
-              {{ item.name }}
-            </span>
-          </div>
-          <div class="flex items-center space-x-4">
-            <span
-              :class="[
-                'px-2 py-1 rounded-[8px] text-xs font-medium',
-                item.status === 1
-                  ? PROVIDER_STATUS_CONFIG.badge.active
-                  : PROVIDER_STATUS_CONFIG.badge.inactive,
-              ]"
-            >
-              {{
-                item.status === 1
-                  ? PROVIDER_STATUS_CONFIG.statusLabels.active
-                  : PROVIDER_STATUS_CONFIG.statusLabels.inactive
-              }}
-            </span>
+          <div
+            v-for="(item, index) in statusList"
+            :key="index"
+            class="flex items-center justify-between py-3 gap-5 border-b border-b-[#F1F1F1] dark:border-b-[#374151] last:border-0"
+          >
+            <div class="flex items-center space-x-3">
+              <div
+                :class="[
+                  'w-[6px] h-[6px] rounded-full',
+                  item.status === 1
+                    ? PROVIDER_STATUS_CONFIG.dot.active
+                    : PROVIDER_STATUS_CONFIG.dot.inactive,
+                ]"
+              ></div>
+              <span
+                class="font-medium text-sm text-default-900 dark:text-white"
+              >
+                {{ item.name }}
+              </span>
+            </div>
+            <div class="flex items-center space-x-4">
+              <span
+                :class="[
+                  'px-2 py-1 rounded-[8px] text-xs font-medium',
+                  item.status === 1
+                    ? PROVIDER_STATUS_CONFIG.badge.active
+                    : PROVIDER_STATUS_CONFIG.badge.inactive,
+                ]"
+              >
+                {{
+                  item.status === 1
+                    ? PROVIDER_STATUS_CONFIG.statusLabels.active
+                    : PROVIDER_STATUS_CONFIG.statusLabels.inactive
+                }}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    </CardContent>
-  </Card>
+      </CardContent>
+    </Card>
+  </div>
 </template>

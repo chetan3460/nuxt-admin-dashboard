@@ -36,14 +36,14 @@ const emit = defineEmits<{
   >
     <div class="flex items-center gap-2">
       <span
-        class="font-semibold text-base text-default-900 inline-flex items-center gap-1"
+        class="font-semibold text-base text-default-900 dark:text-white inline-flex items-center gap-1"
       >
         <img :src="iconSrc" alt="" width="32" height="32" class="shrink-0" />
         System Critical
       </span>
       <button
         @click="emit('close', node.name)"
-        class="ml-auto hover:text-red-600 text-default-900 w-3 h-3 flex items-center justify-center"
+        class="ml-auto hover:text-red-600 text-default-900 dark:text-white w-3 h-3 flex items-center justify-center"
         aria-label="Dismiss system critical notification"
       >
         <svg

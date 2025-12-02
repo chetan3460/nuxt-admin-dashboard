@@ -120,7 +120,12 @@ const handleAction = (id: string) => {
 </script>
 
 <template>
-  <Card class="h-full flex flex-col">
+  <div
+    :class="{
+      'border-2 border-dashed border-primary p-2 rounded-20': dragModeStore.isEnabled,
+    }"
+  >
+    <Card class="h-full flex flex-col">
     <div class="w-full">
       <div class="flex items-center justify-between">
         <CardHeader>
@@ -171,4 +176,5 @@ const handleAction = (id: string) => {
       </CardContent>
     </div>
   </Card>
+  </div>
 </template>

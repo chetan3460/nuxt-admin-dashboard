@@ -145,67 +145,74 @@ const isScrollable = computed(() => sortedServers.value.length > 8);
 </script>
 
 <template>
-  <Card class="h-full flex flex-col">
-    <div class="flex items-center justify-between mb-5">
-      <CardHeader>
-        <CardTitle>Server Statistics</CardTitle>
-        <CardDescription>Last updated ({{ lastUpdated }})</CardDescription>
-      </CardHeader>
-      <div
-        v-if="dragModeStore.isGlobalDragMode"
-        class="cursor-grab flex items-center"
-      >
-        <DragHandleDots16 />
+  <div
+    :class="{
+      'border-2 border-dashed border-primary p-2 rounded-20':
+        dragModeStore.isEnabled,
+    }"
+  >
+    <Card class="h-full flex flex-col">
+      <div class="flex items-center justify-between mb-5">
+        <CardHeader>
+          <CardTitle>Server Statistics</CardTitle>
+          <CardDescription>Last updated ({{ lastUpdated }})</CardDescription>
+        </CardHeader>
+        <div
+          v-if="dragModeStore.isEnabled"
+          class="cursor-grab flex items-center"
+        >
+          <DragHandleDots16 />
+        </div>
+        <OptionsDropdown v-else :onAction="handleAction" />
       </div>
-      <OptionsDropdown v-else :onAction="handleAction" />
-    </div>
 
-    <div class="overflow-hidden flex-1">
-      <div :class="isScrollable ? 'max-h-72 overflow-y-auto' : ''">
-        <Table>
-          <TableHeader class="sticky top-0 z-10 bg-background">
-            <TableRow>
-              <TableHead
-                v-for="key in tableKeys"
-                :key="key"
-                class="cursor-pointer select-none hover:bg-muted/50"
-                @click="handleSort(key)"
-              >
-                <div class="flex items-center gap-1">
-                  <span>{{ columnLabels[key] || key }}</span>
-                  <span v-if="sortKey === key" class="text-xs">
-                    {{ sortDir === "asc" ? "↑" : "↓" }}
-                  </span>
-                </div>
-              </TableHead>
-            </TableRow>
-          </TableHeader>
+      <div class="overflow-hidden flex-1">
+        <div :class="isScrollable ? 'max-h-72 overflow-y-auto' : ''">
+          <Table>
+            <TableHeader class="sticky top-0 z-10 bg-background">
+              <TableRow>
+                <TableHead
+                  v-for="key in tableKeys"
+                  :key="key"
+                  class="cursor-pointer select-none hover:bg-muted/50"
+                  @click="handleSort(key)"
+                >
+                  <div class="flex items-center gap-1">
+                    <span>{{ columnLabels[key] || key }}</span>
+                    <span v-if="sortKey === key" class="text-xs">
+                      {{ sortDir === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </div>
+                </TableHead>
+              </TableRow>
+            </TableHeader>
 
-          <TableBody>
-            <TableRow v-if="sortedServers.length === 0">
-              <TableCell :colspan="tableKeys.length" class="p-4 text-center">
-                No server rows to display
-              </TableCell>
-            </TableRow>
-            <TableRow
-              v-for="(srv, idx) in sortedServers"
-              :key="srv?.host ?? `srv-${idx}`"
-            >
-              <TableCell
-                v-for="key in tableKeys"
-                :key="key"
-                :class="
-                  key === 'exceededThreshold' && srv?.[key]
-                    ? 'text-destructive'
-                    : ''
-                "
+            <TableBody>
+              <TableRow v-if="sortedServers.length === 0">
+                <TableCell :colspan="tableKeys.length" class="p-4 text-center">
+                  No server rows to display
+                </TableCell>
+              </TableRow>
+              <TableRow
+                v-for="(srv, idx) in sortedServers"
+                :key="srv?.host ?? `srv-${idx}`"
               >
-                {{ formatCell(srv, key) }}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+                <TableCell
+                  v-for="key in tableKeys"
+                  :key="key"
+                  :class="
+                    key === 'exceededThreshold' && srv?.[key]
+                      ? 'text-destructive'
+                      : ''
+                  "
+                >
+                  {{ formatCell(srv, key) }}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
       </div>
-    </div>
-  </Card>
+    </Card>
+  </div>
 </template>

@@ -107,7 +107,7 @@ const handleItemClick = (item: MenuItem) => {
     <!-- Dropdown -->
     <div
       v-if="open"
-      class="absolute right-0 mt-1 w-32 rounded-[4px] bg-white dark:bg-[#323E4E] border border-[#E5E5E5] dark:border-[#5C5C5C] shadow-[4px_2px_16px_rgba(0,0,0,0.12)] z-10"
+      class="absolute right-0 mt-1 w-32 rounded-[4px] bg-white dark:bg-[#323E4E] border border-[#E5E5E5] dark:border-[#5C5C5C] shadow-[4px_2px_16px_rgba(0,0,0,0.12)] z-50"
     >
       <button
         v-for="(item, idx) in itemsWithIcons"

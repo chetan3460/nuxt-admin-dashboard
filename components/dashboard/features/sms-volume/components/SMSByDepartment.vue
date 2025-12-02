@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useColorMode } from "@vueuse/core";
 import Card from "@/components/ui/card/Card.vue";
 import CardContent from "@/components/ui/card/CardContent.vue";
 import CardHeader from "@/components/ui/card/CardHeader.vue";
@@ -24,6 +25,8 @@ const emit = defineEmits<{
   (e: "periodChange", period: string): void;
 }>();
 
+const colorMode = useColorMode();
+
 const handleAction = (id: string) => {
   if (id === "export") {
     exportCsv("sms-by-department.csv", chartData);
@@ -34,90 +37,124 @@ const { chartData, lastUpdated } = getDeptChartData(props.deptData);
 
 const series = computed(() => chartData.map((d) => d.value));
 
-const chartOptions = computed(() => ({
-  chart: {
-    type: "donut",
-  },
-  labels: chartData.map((d) => d.name),
-  plotOptions: {
-    pie: {
-      donut: {
-        size: "70%",
-      },
+const chartOptions = computed(() => {
+  const isDark = colorMode.value === "dark";
+
+  return {
+    chart: {
+      type: "donut",
     },
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  legend: {
-    position: "right",
-  },
-  tooltip: {
-    theme: "light",
-    y: {
-      formatter: function (val: number) {
-        return val.toLocaleString();
-      },
-    },
-  },
-  responsive: [
-    {
-      breakpoint: 480,
-      options: {
-        chart: {
-          width: 200,
-        },
-        legend: {
-          position: "bottom",
+    labels: chartData.map((d) => d.name),
+    colors: [
+      "#FF6A88", // Marketing - pink/red gradient
+      "#FFE159", // Support - yellow gradient
+      "#A259FF", // HR - purple gradient
+      "#42A5F5", // Admin - blue gradient
+      "#FDBB2D", // Credit - orange gradient
+      "#3EECAC", // Loan - teal/green gradient
+      "#FF99AC", // Additional colors in case
+      "#FBD217",
+      "#C084FC",
+      "#00B4D8",
+      "#F77500",
+      "#1FD1A7",
+      "#9C27B0",
+      "#FF5722",
+      "#00BCD4",
+    ],
+    plotOptions: {
+      pie: {
+        donut: {
+          size: "70%",
         },
       },
     },
-  ],
-}));
+    dataLabels: {
+      enabled: false,
+    },
+    legend: {
+      position: "right",
+      labels: {
+        colors: isDark ? "#E5E5E5" : "#111827",
+      },
+    },
+    tooltip: {
+      theme: isDark ? "dark" : "light",
+      y: {
+        formatter: function (val: number) {
+          return val.toLocaleString();
+        },
+      },
+    },
+    stroke: {
+      width: 1,
+      colors: ["#fff"],
+    },
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200,
+          },
+          legend: {
+            position: "bottom",
+          },
+        },
+      },
+    ],
+  };
+});
 </script>
 
 <template>
-  <Card class="h-full flex flex-col">
-    <div class="flex items-center justify-between">
-      <CardHeader>
-        <CardTitle>SMS Volume by Department</CardTitle>
-        <CardDescription>Last updated ({ lastUpdated })</CardDescription>
-      </CardHeader>
-      <div class="flex items-center gap-2">
+  <div
+    :class="{
+      'border-2 border-dashed border-primary p-2 rounded-20': isDraggable,
+    }"
+  >
+    <Card class="h-full flex flex-col">
+      <div class="flex items-center justify-between">
+        <CardHeader>
+          <CardTitle>SMS Volume by Department</CardTitle>
+          <CardDescription>Last updated ({ lastUpdated })</CardDescription>
+        </CardHeader>
+        <div class="flex items-center gap-2">
+          <div
+            v-if="isDraggable"
+            class="cursor-grab flex items-center opacity-75 hover:opacity-100"
+          >
+            <DragHandleDots16 />
+          </div>
+          <div v-else class="flex items-center gap-2">
+            <DashboardSelect
+              :value="selectedPeriod"
+              :onChange="(val) => emit('periodChange', val)"
+              :options="selectOptions"
+            />
+            <OptionsDropdown :onAction="handleAction" />
+          </div>
+        </div>
+      </div>
+      <CardContent class="flex-1 flex flex-col justify-between">
+        <div class="relative w-full h-[300px]">
+          <ClientOnly>
+            <apexchart
+              type="donut"
+              height="100%"
+              :options="chartOptions"
+              :series="series"
+            ></apexchart>
+          </ClientOnly>
+        </div>
         <div
-          v-if="isDraggable"
-          class="cursor-grab flex items-center opacity-75 hover:opacity-100"
+          class="py-1 px-2 bg-[#E2F5FD] dark:bg-[#0D475F] rounded-[8px] inline-block mt-3 max-w-max"
         >
-          <DragHandleDots16 />
+          <p class="text-xs font-medium text-[#0067B1] dark:text-[#149BFC]">
+            R&D volume loading consistently for last 3 weeks
+          </p>
         </div>
-        <div v-else class="flex items-center gap-2">
-          <DashboardSelect
-            :value="selectedPeriod"
-            :onChange="(val) => emit('periodChange', val)"
-            :options="selectOptions"
-          />
-          <OptionsDropdown :onAction="handleAction" />
-        </div>
-      </div>
-    </div>
-    <CardContent class="flex-1 flex flex-col justify-between">
-      <div class="relative w-full h-[300px]">
-        <ClientOnly>
-          <apexchart
-            type="donut"
-            height="100%"
-            :options="chartOptions"
-            :series="series"
-          ></apexchart>
-        </ClientOnly>
-      </div>
-      <div
-        class="py-1 px-2 bg-[#E2F5FD] dark:bg-[#0D475F] rounded-[8px] inline-block mt-3 max-w-max"
-      >
-        <p class="text-xs font-medium text-[#0067B1] dark:text-[#149BFC]">
-          R&D volume loading consistently for last 3 weeks
-        </p>
-      </div>
-    </CardContent>
-  </Card>
+      </CardContent>
+    </Card>
+  </div>
 </template>

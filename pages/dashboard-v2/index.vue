@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { useDragModeStore } from "@/stores/dragMode";
 import TitleSection from "@/components/dashboard/ui/TitleSection.vue";
-import CustomizeButton from "@/components/dashboard/ui/CustomizeButton.vue";
+import DragConfirmationPopup from "@/components/dashboard/ui/DragConfirmationPopup.vue";
 import AnalyticCards from "@/components/dashboard/features/analytics/AnalyticCards.vue";
 import Tabs from "@/components/dashboard/ui/Tabs.vue";
 import SMSVolume from "@/components/dashboard/features/sms-volume/SMSVolume.vue";
@@ -31,10 +31,7 @@ const setActiveTab = (tab: string) => {
 
 <template>
   <div class="space-y-6 p-6">
-    <div class="flex items-center justify-between gap-4">
-      <TitleSection />
-      <CustomizeButton />
-    </div>
+    <TitleSection />
 
     <!-- Analytics cards row -->
     <AnalyticCards />
@@ -49,5 +46,8 @@ const setActiveTab = (tab: string) => {
       <SystemHealth v-else-if="activeTab === 'System health'" />
       <Applications v-else-if="activeTab === 'Applications'" />
     </div>
+
+    <!-- Drag Mode Confirmation Popup -->
+    <DragConfirmationPopup />
   </div>
 </template>
