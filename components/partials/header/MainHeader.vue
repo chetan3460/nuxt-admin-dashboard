@@ -8,6 +8,10 @@ import ThemeButton from "./ThemeButton.vue";
 import ProfileInfo from "./ProfileInfo.vue";
 import MobileMenuHandler from "./MobileMenuHandler.vue";
 
+import CustomizeButton from "@/components/dashboard/ui/CustomizeButton.vue";
+import NotificationMessage from "./NotificationMessage.vue";
+import FullScreen from "./FullScreen.vue";
+
 const props = defineProps<{
   handleOpenSearch?: () => void;
 }>();
@@ -36,9 +40,9 @@ const isDesktop = useMediaQuery("(min-width: 1280px)");
           :handleOpenSearch="handleOpenSearch"
         />
         <div class="nav-tools flex items-center gap-2 md:gap-6">
-          <!-- <CustomizeButton /> -->
-          <!-- <NotificationMessage /> -->
-          <!-- <FullScreen v-if="isDesktop" /> -->
+          <CustomizeButton />
+          <NotificationMessage />
+          <FullScreen v-if="isDesktop" />
           <ThemeButton />
           <div class="pl-2">
             <ProfileInfo />
