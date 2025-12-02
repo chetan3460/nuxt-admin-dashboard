@@ -89,71 +89,78 @@ const isScrollable = computed(() => sortedRows.value.length > 6);
 </script>
 
 <template>
-  <Card class="h-full flex flex-col">
-    <div class="flex items-center justify-between">
-      <CardHeader>
-        <CardTitle>Redis</CardTitle>
-        <CardDescription>
-          Last updated ({{ redisData.lastUpdated }})
-        </CardDescription>
-      </CardHeader>
-      <div
-        v-if="dragModeStore.isGlobalDragMode"
-        class="cursor-grab flex items-center"
-      >
-        <DragHandleDots16 />
-      </div>
-      <OptionsDropdown v-else :onAction="handleAction" />
-    </div>
-
-    <CardContent class="flex-1">
-      <div class="overflow-hidden">
-        <div :class="isScrollable ? 'max-h-72 overflow-y-auto' : ''">
-          <Table>
-            <TableHeader
-              class="sticky top-0 z-10 bg-header-bg dark:bg-header-bg-dark"
-            >
-              <TableRow>
-                <SortableHeaderCell
-                  v-for="col in Object.values(columns)"
-                  :key="col.key"
-                  :label="col.label"
-                  :column-key="col.key"
-                  :sort-key="sortKey"
-                  :sort-dir="sortDir"
-                  @sort="handleSort"
-                />
-              </TableRow>
-            </TableHeader>
-
-            <TableBody>
-              <TableRow
-                v-for="(row, idx) in sortedRows"
-                :key="row.name ?? idx"
-                :class="{
-                  'bg-destructive-foreground/10 dark:bg-red-950/20':
-                    row.status === 'Inactive',
-                }"
-              >
-                <TableCell>
-                  <span class="inline-flex items-center gap-1 text-primary">
-                    {{ row.name }}
-                    <CriticalBadge v-if="row.exceededThreshold" />
-                  </span>
-                </TableCell>
-                <TableCell class="text-default-900">{{ row.host }}</TableCell>
-                <TableCell>{{ formatFixed(row.cpu, 1) }}</TableCell>
-                <TableCell>{{ formatFixed(row.memory, 1) }}</TableCell>
-                <TableCell>
-                  <Badge :color="getStatusColor(row.status)">
-                    {{ row.status }}
-                  </Badge>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+  <template>
+    <Card
+      class="h-full flex flex-col"
+      :class="{
+        'border-2 border-dashed border-primary': dragModeStore.isGlobalDragMode,
+      }"
+    >
+      <div class="flex items-center justify-between">
+        <CardHeader>
+          <CardTitle>Redis</CardTitle>
+          <CardDescription>
+            Last updated ({{ redisData.lastUpdated }})
+          </CardDescription>
+        </CardHeader>
+        <div
+          v-if="dragModeStore.isGlobalDragMode"
+          class="cursor-grab flex items-center"
+        >
+          <DragHandleDots16 />
         </div>
+        <OptionsDropdown v-else :onAction="handleAction" />
       </div>
-    </CardContent>
-  </Card>
+
+      <CardContent class="flex-1">
+        <div class="overflow-hidden">
+          <div :class="isScrollable ? 'max-h-72 overflow-y-auto' : ''">
+            <Table>
+              <TableHeader
+                class="sticky top-0 z-10 bg-header-bg dark:bg-header-bg-dark"
+              >
+                <TableRow>
+                  <SortableHeaderCell
+                    v-for="col in Object.values(columns)"
+                    :key="col.key"
+                    :label="col.label"
+                    :column-key="col.key"
+                    :sort-key="sortKey"
+                    :sort-dir="sortDir"
+                    @sort="handleSort"
+                  />
+                </TableRow>
+              </TableHeader>
+
+              <TableBody>
+                <TableRow
+                  v-for="(row, idx) in sortedRows"
+                  :key="row.name ?? idx"
+                  :class="{
+                    'bg-destructive-foreground/10 dark:bg-red-950/20':
+                      row.status === 'Inactive',
+                  }"
+                >
+                  <TableCell>
+                    <span class="inline-flex items-center gap-1 text-primary">
+                      {{ row.name }}
+                      <CriticalBadge v-if="row.exceededThreshold" />
+                    </span>
+                  </TableCell>
+                  <TableCell class="text-default-900">{{ row.host }}</TableCell>
+                  <TableCell>{{ formatFixed(row.cpu, 1) }}</TableCell>
+                  <TableCell>{{ formatFixed(row.memory, 1) }}</TableCell>
+                  <TableCell>
+                    <Badge :color="getStatusColor(row.status)">
+                      {{ row.status }}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  </template>
 </template>

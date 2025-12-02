@@ -12,6 +12,7 @@ defineProps<{
 <template>
   <div
     class="rounded-20 p-4 bg-card shadow transition-all duration-300 group relative h-full"
+    :class="{ 'border-2 border-dashed border-primary': isDraggable }"
   >
     <!-- Drag handle -->
     <div

@@ -171,7 +171,12 @@ const handleTopicScroll = () => {
 </script>
 
 <template>
-  <Card class="h-full flex flex-col">
+  <Card
+    class="h-full flex flex-col"
+    :class="{
+      'border-2 border-dashed border-primary': dragModeStore.isGlobalDragMode,
+    }"
+  >
     <div class="flex items-center justify-between">
       <CardHeader>
         <div class="flex items-center gap-2">

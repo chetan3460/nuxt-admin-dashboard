@@ -8,16 +8,9 @@ const dragModeStore = useDragModeStore();
 <template>
   <button
     @click="dragModeStore.toggle()"
-    class="flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors"
-    :class="
-      dragModeStore.isEnabled
-        ? 'bg-primary text-primary-foreground border-primary'
-        : 'bg-background text-foreground border-border hover:bg-accent'
-    "
+    class="p-2 rounded-full hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+    :class="{ 'text-primary bg-accent': dragModeStore.isEnabled }"
   >
-    <CustomizeIcon class="w-4 h-4" />
-    <span class="text-sm font-medium">
-      {{ dragModeStore.isEnabled ? "Done" : "Customize" }}
-    </span>
+    <CustomizeIcon class="w-5 h-5" />
   </button>
 </template>
