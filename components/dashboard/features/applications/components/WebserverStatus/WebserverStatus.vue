@@ -17,8 +17,8 @@ import DragHandleDots16 from "@/components/dashboard/ui/icons/DragHandleDots16.v
 import OptionsDropdown from "@/components/dashboard/ui/OptionsDropdown.vue";
 import SortableHeaderCell from "../shared/SortableHeaderCell.vue";
 import { exportCsv } from "@/utils/csv";
-import { webservers } from "./data";
-import { columns } from "./config";
+import { webservers } from "./webserver-data";
+import { columns } from "./webserver-config";
 
 const dragModeStore = useDragModeStore();
 

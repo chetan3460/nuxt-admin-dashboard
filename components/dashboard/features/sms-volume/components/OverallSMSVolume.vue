@@ -9,7 +9,7 @@ import CardDescription from "@/components/ui/card/CardDescription.vue";
 import DragHandleDots16 from "@/components/dashboard/ui/icons/DragHandleDots16.vue";
 import OptionsDropdown from "@/components/dashboard/ui/OptionsDropdown.vue";
 import DashboardSelect from "@/components/dashboard/ui/DashboardSelect.vue";
-import { getChartData } from "../data";
+import { getChartData } from "../sms-data";
 import { exportCsv } from "@/utils/csv";
 
 const props = defineProps<{
@@ -63,7 +63,7 @@ const chartOptions = computed(() => {
     chart: {
       type: "line",
       toolbar: {
-        show: true,
+        show: false,
       },
       zoom: {
         enabled: false,

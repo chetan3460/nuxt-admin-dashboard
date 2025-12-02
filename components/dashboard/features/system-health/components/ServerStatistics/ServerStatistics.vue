@@ -14,7 +14,7 @@ import CardDescription from "@/components/ui/card/CardDescription.vue";
 import DragHandleDots16 from "@/components/dashboard/ui/icons/DragHandleDots16.vue";
 import OptionsDropdown from "@/components/dashboard/ui/OptionsDropdown.vue";
 import { exportCsv } from "@/utils/csv";
-import { servers as serverData } from "./data";
+import { servers as serverData } from "./server-data";
 
 const dragModeStore = useDragModeStore();
 

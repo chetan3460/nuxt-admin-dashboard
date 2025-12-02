@@ -10,7 +10,10 @@ import CardContent from "@/components/ui/card/CardContent.vue";
 import DragHandleDots16 from "@/components/dashboard/ui/icons/DragHandleDots16.vue";
 import OptionsDropdown from "@/components/dashboard/ui/OptionsDropdown.vue";
 import DashboardSelect from "@/components/dashboard/ui/DashboardSelect.vue";
-import { providerTrafficRaw, providerTrafficData } from "../data";
+import {
+  providerTrafficRaw,
+  providerTrafficData,
+} from "../service-providers-data";
 import { exportCsv } from "@/utils/csv";
 
 const dragModeStore = useDragModeStore();
@@ -92,49 +95,50 @@ const chartOptions = computed(() => {
 <template>
   <div
     :class="{
-      'border-2 border-dashed border-primary p-2 rounded-20': dragModeStore.isEnabled,
+      'border-2 border-dashed border-primary p-2 rounded-20':
+        dragModeStore.isEnabled,
     }"
   >
     <Card class="h-full flex flex-col">
-    <div
-      class="flex lg:items-center justify-between lg:flex-row flex-col gap-2"
-    >
-      <CardHeader>
-        <CardTitle>Service Provider Traffic</CardTitle>
-        <CardDescription>
-          Last updated ({{ providerTrafficRaw.lastUpdated }})
-        </CardDescription>
-      </CardHeader>
-      <div class="flex items-center gap-2">
-        <div
-          v-if="dragModeStore.isEnabled"
-          class="cursor-grab flex items-center drag-handle"
-        >
-          <DragHandleDots16 />
+      <div
+        class="flex lg:items-center justify-between lg:flex-row flex-col gap-2"
+      >
+        <CardHeader>
+          <CardTitle>Service Provider Traffic</CardTitle>
+          <CardDescription>
+            Last updated ({{ providerTrafficRaw.lastUpdated }})
+          </CardDescription>
+        </CardHeader>
+        <div class="flex items-center gap-2">
+          <div
+            v-if="dragModeStore.isEnabled"
+            class="cursor-grab flex items-center drag-handle"
+          >
+            <DragHandleDots16 />
+          </div>
+          <template v-else>
+            <DashboardSelect
+              :value="selectedPeriod"
+              :onChange="handlePeriodChange"
+              :options="selectOptions"
+            />
+            <OptionsDropdown :onAction="handleAction" />
+          </template>
         </div>
-        <template v-else>
-          <DashboardSelect
-            :value="selectedPeriod"
-            :onChange="handlePeriodChange"
-            :options="selectOptions"
-          />
-          <OptionsDropdown :onAction="handleAction" />
-        </template>
       </div>
-    </div>
 
-    <CardContent>
-      <div class="h-80">
-        <ClientOnly>
-          <apexchart
-            type="donut"
-            height="100%"
-            :options="chartOptions"
-            :series="chartData"
-          />
-        </ClientOnly>
-      </div>
-    </CardContent>
-  </Card>
+      <CardContent>
+        <div class="h-80">
+          <ClientOnly>
+            <apexchart
+              type="donut"
+              height="100%"
+              :options="chartOptions"
+              :series="chartData"
+            />
+          </ClientOnly>
+        </div>
+      </CardContent>
+    </Card>
   </div>
 </template>

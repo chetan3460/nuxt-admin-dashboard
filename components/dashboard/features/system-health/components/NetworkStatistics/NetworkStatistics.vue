@@ -11,7 +11,7 @@ import Button from "@/components/ui/button/Button.vue";
 import DragHandleDots16 from "@/components/dashboard/ui/icons/DragHandleDots16.vue";
 import OptionsDropdown from "@/components/dashboard/ui/OptionsDropdown.vue";
 import { exportCsv } from "@/utils/csv";
-import { networkRaw, networkData } from "./data";
+import { networkRaw, networkData } from "./network-data";
 
 const dragModeStore = useDragModeStore();
 const colorMode = useColorMode();
@@ -122,59 +122,60 @@ const handleAction = (id: string) => {
 <template>
   <div
     :class="{
-      'border-2 border-dashed border-primary p-2 rounded-20': dragModeStore.isEnabled,
+      'border-2 border-dashed border-primary p-2 rounded-20':
+        dragModeStore.isEnabled,
     }"
   >
     <Card class="h-full flex flex-col">
-    <div class="w-full">
-      <div class="flex items-center justify-between">
-        <CardHeader>
-          <CardTitle>Network statistics</CardTitle>
-          <CardDescription>
-            Last updated ({{ networkRaw.lastUpdated }})
-          </CardDescription>
-        </CardHeader>
-        <div class="flex items-center gap-2">
-          <div
-            v-if="dragModeStore.isGlobalDragMode"
-            class="opacity-75 hover:opacity-100 transition-opacity cursor-grab flex items-center"
-          >
-            <DragHandleDots16 />
+      <div class="w-full">
+        <div class="flex items-center justify-between">
+          <CardHeader>
+            <CardTitle>Network statistics</CardTitle>
+            <CardDescription>
+              Last updated ({{ networkRaw.lastUpdated }})
+            </CardDescription>
+          </CardHeader>
+          <div class="flex items-center gap-2">
+            <div
+              v-if="dragModeStore.isGlobalDragMode"
+              class="opacity-75 hover:opacity-100 transition-opacity cursor-grab flex items-center"
+            >
+              <DragHandleDots16 />
+            </div>
+            <template v-else>
+              <select
+                v-model="selectedServer"
+                class="text-sm border rounded px-3 py-2 bg-background dark:bg-[#323E4E]"
+              >
+                <option value="Server 1">Server 1</option>
+                <option value="Server 2">Server 2</option>
+                <option value="Server 3">Server 3</option>
+              </select>
+              <select
+                v-model="selectedDisplay"
+                class="text-sm border rounded px-3 py-2 bg-background dark:bg-[#323E4E]"
+              >
+                <option value="Percentage">Percentage</option>
+                <option value="Count">Count</option>
+              </select>
+              <OptionsDropdown :onAction="handleAction" />
+            </template>
           </div>
-          <template v-else>
-            <select
-              v-model="selectedServer"
-              class="text-sm border rounded px-3 py-2 bg-background dark:bg-[#323E4E]"
-            >
-              <option value="Server 1">Server 1</option>
-              <option value="Server 2">Server 2</option>
-              <option value="Server 3">Server 3</option>
-            </select>
-            <select
-              v-model="selectedDisplay"
-              class="text-sm border rounded px-3 py-2 bg-background dark:bg-[#323E4E]"
-            >
-              <option value="Percentage">Percentage</option>
-              <option value="Count">Count</option>
-            </select>
-            <OptionsDropdown :onAction="handleAction" />
-          </template>
         </div>
-      </div>
 
-      <CardContent class="flex-1 flex flex-col">
-        <div :style="{ height: `${chartHeight}px` }">
-          <ClientOnly>
-            <apexchart
-              type="area"
-              height="100%"
-              :options="chartOptions"
-              :series="series"
-            />
-          </ClientOnly>
-        </div>
-      </CardContent>
-    </div>
-  </Card>
+        <CardContent class="flex-1 flex flex-col">
+          <div :style="{ height: `${chartHeight}px` }">
+            <ClientOnly>
+              <apexchart
+                type="area"
+                height="100%"
+                :options="chartOptions"
+                :series="series"
+              />
+            </ClientOnly>
+          </div>
+        </CardContent>
+      </div>
+    </Card>
   </div>
 </template>

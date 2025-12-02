@@ -10,7 +10,7 @@ import OngoingTPS from "./components/OngoingTPS.vue";
 import AvgLatency from "./components/AvgLatency.vue";
 import DeliveryReports from "./components/DeliveryReports.vue";
 import SuccessfulTransactions from "./components/SuccessfulTransactions.vue";
-import { apiCallsByProviderData } from "./data";
+import { apiCallsByProviderData } from "./service-providers-data";
 
 const dragModeStore = useDragModeStore();
 

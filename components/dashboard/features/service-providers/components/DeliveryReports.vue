@@ -10,7 +10,10 @@ import CardContent from "@/components/ui/card/CardContent.vue";
 import DragHandleDots16 from "@/components/dashboard/ui/icons/DragHandleDots16.vue";
 import OptionsDropdown from "@/components/dashboard/ui/OptionsDropdown.vue";
 import DashboardSelect from "@/components/dashboard/ui/DashboardSelect.vue";
-import { deliveryReportsRaw, deliveryReportsData } from "../data";
+import {
+  deliveryReportsRaw,
+  deliveryReportsData,
+} from "../service-providers-data";
 import { exportCsv } from "@/utils/csv";
 
 const dragModeStore = useDragModeStore();

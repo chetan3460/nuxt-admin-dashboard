@@ -11,7 +11,7 @@ import DragHandleDots16 from "@/components/dashboard/ui/icons/DragHandleDots16.v
 import OptionsDropdown from "@/components/dashboard/ui/OptionsDropdown.vue";
 import DashboardSelect from "@/components/dashboard/ui/DashboardSelect.vue";
 import Badge from "@/components/ui/badge/Badge.vue";
-import { avgLatencyRaw, avgLatencyData } from "../data";
+import { avgLatencyRaw, avgLatencyData } from "../service-providers-data";
 import { exportCsv } from "@/utils/csv";
 
 const dragModeStore = useDragModeStore();

@@ -18,8 +18,8 @@ import OptionsDropdown from "@/components/dashboard/ui/OptionsDropdown.vue";
 import CriticalBadge from "../shared/CriticalBadge.vue";
 import SortableHeaderCell from "../shared/SortableHeaderCell.vue";
 import { exportCsv } from "@/utils/csv";
-import { databaseData, ioDetails } from "./data";
-import { columns } from "./config";
+import { databaseData, ioDetails } from "./database-data";
+import { columns } from "./database-config";
 
 const dragModeStore = useDragModeStore();
 

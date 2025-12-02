@@ -9,7 +9,7 @@ import CardDescription from "@/components/ui/card/CardDescription.vue";
 import DragHandleDots16 from "@/components/dashboard/ui/icons/DragHandleDots16.vue";
 import OptionsDropdown from "@/components/dashboard/ui/OptionsDropdown.vue";
 import DashboardSelect from "@/components/dashboard/ui/DashboardSelect.vue";
-import { getProviderChartData } from "../data";
+import { getProviderChartData } from "../sms-data";
 import { exportCsv } from "@/utils/csv";
 
 const props = defineProps<{

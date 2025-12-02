@@ -5,7 +5,7 @@ import { useDragModeStore } from "@/stores/dragMode";
 import OverallSMSVolume from "./components/OverallSMSVolume.vue";
 import SMSByProvider from "./components/SMSByProvider.vue";
 import SMSByDepartment from "./components/SMSByDepartment.vue";
-import { smsData } from "./data";
+import { smsData } from "./sms-data";
 
 const props = defineProps<{
   selectedPeriod?: string;
