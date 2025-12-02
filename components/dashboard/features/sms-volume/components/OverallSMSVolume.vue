@@ -151,7 +151,7 @@ const chartOptions = computed(() => {
         <CardHeader>
           <CardTitle>Overall SMS volume</CardTitle>
           <CardDescription>
-            Last updated ({ smsData?.lastUpdated || "N/A" })
+            Last updated ({{ smsData?.lastUpdated || "N/A" }})
           </CardDescription>
         </CardHeader>
         <div class="flex items-center gap-2">

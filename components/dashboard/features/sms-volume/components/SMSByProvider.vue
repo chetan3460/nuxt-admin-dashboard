@@ -136,7 +136,7 @@ const chartOptions = computed(() => {
       <div class="flex items-center justify-between">
         <CardHeader>
           <CardTitle>SMS volume by service provider</CardTitle>
-          <CardDescription>Last updated ({ lastUpdated })</CardDescription>
+          <CardDescription>Last updated ({{ lastUpdated }})</CardDescription>
         </CardHeader>
         <div class="flex items-center gap-2">
           <div
