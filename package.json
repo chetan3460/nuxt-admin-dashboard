@@ -29,7 +29,7 @@
     "tailwindcss-animate": "^1.0.7",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
-    "vue3-apexcharts": "^1.5.2"
+    "vue3-apexcharts": "1.5.2"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
