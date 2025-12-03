@@ -2,6 +2,10 @@
 
 A modern, high-performance admin dashboard built with Nuxt 3, Tailwind CSS, and TypeScript.
 
+## 🚀 Live Demo
+
+**[View Live Demo →](https://nexus-dashboard-chetan.vercel.app)**
+
 ## Features
 
 - **Modern Stack**: Built with Nuxt 3, Vue 3, and TypeScript
