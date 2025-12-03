@@ -24,13 +24,15 @@ const toggleCollapsed = () => {
 <template>
   <div class="flex items-center md:gap-6 gap-3">
     <!-- Logo for mobile or semibox -->
-    <NuxtLink
-      v-if="(layout === 'semibox' || layout === 'vertical') && !isDesktop"
-      to="/dashboard-v2"
-      class="text-primary"
-    >
-      <NexusLogo :collapsed="false" />
-    </NuxtLink>
+    <ClientOnly>
+      <NuxtLink
+        v-if="(layout === 'semibox' || layout === 'vertical') && !isDesktop"
+        to="/dashboard-v2"
+        class="text-primary"
+      >
+        <NexusLogo :collapsed="false" />
+      </NuxtLink>
+    </ClientOnly>
 
     <!-- Menu Bar -->
     <button

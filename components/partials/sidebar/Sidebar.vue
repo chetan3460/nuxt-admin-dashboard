@@ -8,7 +8,9 @@ const isDesktop = useMediaQuery("(min-width: 1280px)");
 
 <template>
   <div>
-    <ClassicSidebar v-if="isDesktop" />
-    <MobileSidebar v-else />
+    <ClientOnly>
+      <ClassicSidebar v-if="isDesktop" />
+      <MobileSidebar v-else />
+    </ClientOnly>
   </div>
 </template>

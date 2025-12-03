@@ -160,7 +160,7 @@ export const providerObj = {
   Infobip: { total: 55035 },
   Tanla: { total: 19971 },
   Synch: { total: 55035 },
-  Equence: { total: 19971 },
+  Nexus: { total: 19971 },
   RouteMobile: { total: 31234 },
   Kaleyra: { total: 27890 },
   Twilio: { total: 43123 },

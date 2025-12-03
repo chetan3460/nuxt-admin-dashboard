@@ -9,7 +9,7 @@ const props = defineProps<{
     <!-- Text -->
     <span
       v-if="!collapsed"
-      class="text-xl font-bold text-default-900 dark:text-white tracking-tight"
+      class="text-xl font-bold bg-gradient-to-r from-violet-500 to-blue-500 bg-clip-text text-transparent tracking-tight"
     >
       NEXUS
     </span>

@@ -21,7 +21,7 @@ const applyBodyClasses = () => {
       // Home page: remove theme-custom class and radius
       body.className = cn(
         "dash-tail-app",
-        body.className.replace(/theme-custom/g, "").trim(),
+        body.className.replace(/theme-custom/g, "").trim()
       );
       body.style.removeProperty("--radius");
     } else {
@@ -40,12 +40,12 @@ watch(
   () => route.path,
   () => {
     applyBodyClasses();
-  },
+  }
 );
 </script>
 
 <template>
-  <div class="equence-app min-h-screen">
+  <div class="nexus-app min-h-screen">
     <DragProvider>
       <MainHeader />
       <Sidebar />

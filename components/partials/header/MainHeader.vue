@@ -42,12 +42,16 @@ const isDesktop = useMediaQuery("(min-width: 1280px)");
         <div class="nav-tools flex items-center gap-2 md:gap-6">
           <CustomizeButton />
           <NotificationMessage />
-          <FullScreen v-if="isDesktop" />
+          <ClientOnly>
+            <FullScreen v-if="isDesktop" />
+          </ClientOnly>
           <ThemeButton />
           <div class="pl-2">
             <ProfileInfo />
           </div>
-          <MobileMenuHandler v-if="!isDesktop" />
+          <ClientOnly>
+            <MobileMenuHandler v-if="!isDesktop" />
+          </ClientOnly>
         </div>
       </div>
     </div>
