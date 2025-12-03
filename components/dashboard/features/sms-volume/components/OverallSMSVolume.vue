@@ -86,7 +86,7 @@ const chartOptions = computed(() => {
       },
       axisBorder: {
         show: true,
-        color: isDark ? "#9CA3AF" : "#4B5563",
+        color: isDark ? "#666" : "#666",
       },
       axisTicks: {
         show: true,
@@ -105,7 +105,7 @@ const chartOptions = computed(() => {
       },
       axisBorder: {
         show: true,
-        color: isDark ? "#9CA3AF" : "#4B5563",
+        color: isDark ? "#666" : "#666",
       },
       axisTicks: {
         show: true,

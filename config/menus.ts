@@ -9,16 +9,6 @@ export const menusConfig = {
           href: "/dashboard-v2",
           icon: "lucide:line-chart",
         },
-        {
-          title: "Interactive",
-          href: "/dashboard-v2/interactive",
-          icon: "lucide:line-chart",
-        },
-        {
-          title: "Guides",
-          href: "/dashboard-v2/guides",
-          icon: "lucide:line-chart",
-        },
       ],
     },
   ],
@@ -31,16 +21,6 @@ export const menusConfig = {
           {
             title: "Dashboard V2",
             href: "/dashboard-v2",
-            icon: "lucide:line-chart",
-          },
-          {
-            title: "Interactive",
-            href: "/dashboard-v2/interactive",
-            icon: "lucide:line-chart",
-          },
-          {
-            title: "Guides",
-            href: "/dashboard-v2/guides",
             icon: "lucide:line-chart",
           },
         ],
@@ -58,16 +38,6 @@ export const menusConfig = {
           {
             title: "Dashboard V2",
             href: "/dashboard-v2",
-            icon: "lucide:line-chart",
-          },
-          {
-            title: "Interactive",
-            href: "/dashboard-v2/interactive",
-            icon: "lucide:line-chart",
-          },
-          {
-            title: "Guides",
-            href: "/dashboard-v2/guides",
             icon: "lucide:line-chart",
           },
         ],

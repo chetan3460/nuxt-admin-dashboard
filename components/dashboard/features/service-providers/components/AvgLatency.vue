@@ -68,17 +68,17 @@ const chartOptions = computed(() => {
     stroke: {
       width: 0,
     },
-    colors: ["#A259FF"],
+    colors: ["#4F46E5"],
     fill: {
       type: "gradient",
       gradient: {
         shade: "light",
         type: "vertical",
         shadeIntensity: 0.5,
-        gradientToColors: ["#C084FC"],
+        gradientToColors: ["#818CF8"],
         inverseColors: false,
-        opacityFrom: 0.6,
-        opacityTo: 0.1,
+        opacityFrom: 0.9,
+        opacityTo: 0.6,
         stops: [0, 100],
       },
     },
@@ -97,7 +97,7 @@ const chartOptions = computed(() => {
       },
       axisBorder: {
         show: true,
-        color: isDark ? "#9CA3AF" : "#4B5563",
+        color: isDark ? "#666" : "#666",
       },
       axisTicks: {
         show: true,
@@ -110,6 +110,10 @@ const chartOptions = computed(() => {
           colors: isDark ? "#E5E5E5" : "#111827",
         },
         formatter: (value: number) => `${value}ms`,
+      },
+      axisBorder: {
+        show: true,
+        color: isDark ? "#666" : "#666",
       },
     },
     grid: {

@@ -21,11 +21,12 @@ const dragModeStore = useDragModeStore();
 // Column definitions
 const columnLabels: Record<string, string> = {
   host: "Host",
+  componentType: "ComponentType",
   cpu: "CPU %",
   memory: "Memory %",
   threads: "Threads",
   disk: "Disk %",
-  io: "IO (r/w)",
+  io: "IO (R/W)",
   exceededThreshold: "Threshold",
 };
 
@@ -35,13 +36,10 @@ const sortDir = ref<"asc" | "desc">("asc");
 
 // Get table keys from data
 const tableKeys = computed(() => {
-  if (Array.isArray(serverData) && serverData.length > 0) {
-    return Object.keys(serverData[0]).filter(
-      (k) => k !== "timestamp" && k !== "componentType"
-    );
-  }
+  // Define explicit order matching the screenshot
   return [
     "host",
+    "componentType",
     "cpu",
     "memory",
     "threads",
@@ -154,7 +152,7 @@ const isScrollable = computed(() => sortedServers.value.length > 8);
     <Card class="h-full flex flex-col">
       <div class="flex items-center justify-between mb-5">
         <CardHeader>
-          <CardTitle>Server Statistics</CardTitle>
+          <CardTitle>API calls by service provider today</CardTitle>
           <CardDescription>Last updated ({{ lastUpdated }})</CardDescription>
         </CardHeader>
         <div
@@ -169,19 +167,19 @@ const isScrollable = computed(() => sortedServers.value.length > 8);
       <div class="overflow-hidden flex-1">
         <div :class="isScrollable ? 'max-h-72 overflow-y-auto' : ''">
           <Table>
-            <TableHeader class="sticky top-0 z-10 bg-background">
-              <TableRow>
+            <TableHeader
+              class="sticky top-0 z-10 bg-[#E0DDFE] dark:bg-[#323E4E]"
+            >
+              <TableRow class="hover:bg-transparent border-b-0">
                 <TableHead
                   v-for="key in tableKeys"
                   :key="key"
-                  class="cursor-pointer select-none hover:bg-muted/50"
+                  class="cursor-pointer select-none text-default-900 dark:text-white h-10 font-semibold text-xs"
                   @click="handleSort(key)"
                 >
                   <div class="flex items-center gap-1">
                     <span>{{ columnLabels[key] || key }}</span>
-                    <span v-if="sortKey === key" class="text-xs">
-                      {{ sortDir === "asc" ? "↑" : "↓" }}
-                    </span>
+                    <span class="text-xs"> ↓ </span>
                   </div>
                 </TableHead>
               </TableRow>
@@ -196,10 +194,12 @@ const isScrollable = computed(() => sortedServers.value.length > 8);
               <TableRow
                 v-for="(srv, idx) in sortedServers"
                 :key="srv?.host ?? `srv-${idx}`"
+                class="border-b border-gray-100 dark:border-gray-800"
               >
                 <TableCell
                   v-for="key in tableKeys"
                   :key="key"
+                  class="py-3"
                   :class="
                     key === 'exceededThreshold' && srv?.[key]
                       ? 'text-destructive'

@@ -22,13 +22,11 @@ const footerType = "static";
   >
     <div class="block md:flex md:justify-between text-muted-foreground">
       <p class="sm:mb-0 text-xs md:text-sm">
-        COPYRIGHT © {{ new Date().getFullYear() }} Equence All rights Reserved
+        COPYRIGHT © {{ new Date().getFullYear() }} Nexus All rights Reserved
       </p>
       <p class="mb-0 text-xs md:text-sm">
-        Design by
-        <a class="text-primary" target="__blank" href="https://screenroot.com/">
-          Screenroot
-        </a>
+        Developed by
+        <span class="text-primary font-semibold">Chetan</span>
       </p>
     </div>
   </FooterLayout>

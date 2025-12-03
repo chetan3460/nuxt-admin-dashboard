@@ -120,18 +120,20 @@ const isScrollable = computed(() => sortedRows.value.length > 6);
           <div :class="isScrollable ? 'max-h-72 overflow-y-auto' : ''">
             <Table>
               <TableHeader
-                class="sticky top-0 z-10 bg-header-bg dark:bg-header-bg-dark"
+                class="sticky top-0 z-10 bg-[#E0DDFE] dark:bg-[#323E4E]"
               >
-                <TableRow>
-                  <SortableHeaderCell
+                <TableRow class="hover:bg-transparent border-b-0">
+                  <TableHead
                     v-for="col in Object.values(columns)"
                     :key="col.key"
-                    :label="col.label"
-                    :column-key="col.key"
-                    :sort-key="sortKey"
-                    :sort-dir="sortDir"
-                    @sort="handleSort"
-                  />
+                    class="cursor-pointer select-none text-default-900 dark:text-white h-10 font-semibold text-xs"
+                    @click="handleSort(col.key)"
+                  >
+                    <div class="flex items-center gap-1">
+                      <span>{{ col.label }}</span>
+                      <span class="text-xs"> ↓ </span>
+                    </div>
+                  </TableHead>
                 </TableRow>
               </TableHeader>
 
@@ -139,25 +141,34 @@ const isScrollable = computed(() => sortedRows.value.length > 6);
                 <TableRow
                   v-for="(row, idx) in sortedRows"
                   :key="row.name ?? idx"
+                  class="border-b border-gray-100 dark:border-gray-800"
                   :class="{
                     'bg-destructive-foreground/10 dark:bg-red-950/20':
                       row.status === 'Inactive',
                   }"
                 >
-                  <TableCell>
+                  <TableCell class="py-3">
                     <span class="inline-flex items-center gap-1 text-primary">
                       {{ row.name }}
                       <CriticalBadge v-if="row.exceededThreshold" />
                     </span>
                   </TableCell>
-                  <TableCell class="text-default-900 dark:text-white">{{
+                  <TableCell class="py-3 text-default-900 dark:text-white">{{
                     row.host
                   }}</TableCell>
-                  <TableCell>{{ formatFixed(row.cpu, 1) }}</TableCell>
-                  <TableCell>{{ formatFixed(row.memory, 1) }}</TableCell>
-                  <TableCell>{{ formatInteger(row.threads) }}</TableCell>
-                  <TableCell>{{ formatFixed(row.heap, 2) }}</TableCell>
-                  <TableCell>
+                  <TableCell class="py-3">{{
+                    formatFixed(row.cpu, 1)
+                  }}</TableCell>
+                  <TableCell class="py-3">{{
+                    formatFixed(row.memory, 1)
+                  }}</TableCell>
+                  <TableCell class="py-3">{{
+                    formatInteger(row.threads)
+                  }}</TableCell>
+                  <TableCell class="py-3">{{
+                    formatFixed(row.heap, 2)
+                  }}</TableCell>
+                  <TableCell class="py-3">
                     <Badge :color="getStatusColor(row.status)">
                       {{ row.status }}
                     </Badge>

@@ -61,20 +61,28 @@ const chartOptions = computed(() => {
     plotOptions: {
       bar: {
         horizontal: false,
-        columnWidth: "16px",
+        columnWidth: "55%",
         borderRadius: 4,
         borderRadiusApplication: "end",
       },
     },
-    colors: ["#3EECAC", "#FF6A88"],
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ["transparent"],
+    },
+    colors: ["#16a34a", "#dc2626"],
     fill: {
-      type: "gradient",
+      type: ["gradient", "gradient"],
       gradient: {
         shade: "light",
-        type: "horizontal",
+        type: "vertical",
         shadeIntensity: 0.25,
-        gradientToColors: ["#42A5F5", "#FF99AC"],
-        inverseColors: false,
+        gradientToColors: ["#4ade80", "#f87171"],
+        inverseColors: true,
         opacityFrom: 1,
         opacityTo: 1,
         stops: [0, 100],
@@ -92,7 +100,7 @@ const chartOptions = computed(() => {
       },
       axisBorder: {
         show: true,
-        color: isDark ? "#9CA3AF" : "#4B5563",
+        color: isDark ? "#666" : "#666",
       },
       axisTicks: {
         show: true,
@@ -109,10 +117,24 @@ const chartOptions = computed(() => {
           return value.toString();
         },
       },
+      axisBorder: {
+        show: true,
+        color: isDark ? "#666" : "#666",
+      },
     },
     grid: {
-      borderColor: isDark ? "#374151" : "#E5E7EB",
+      borderColor: isDark ? "#374151" : "#DADADA",
       strokeDashArray: 3,
+      xaxis: {
+        lines: {
+          show: true,
+        },
+      },
+      yaxis: {
+        lines: {
+          show: true,
+        },
+      },
     },
     legend: {
       position: "bottom",
@@ -121,15 +143,28 @@ const chartOptions = computed(() => {
         colors: isDark ? "#E5E5E5" : "#111827",
       },
       markers: {
-        width: 12,
-        height: 12,
+        width: 23,
+        height: 8,
         radius: 2,
+      },
+      itemMargin: {
+        horizontal: 10,
+        vertical: 0,
       },
     },
     tooltip: {
       theme: isDark ? "dark" : "light",
       y: {
         formatter: (value: number) => value.toLocaleString(),
+      },
+      style: {
+        fontSize: "12px",
+      },
+      marker: {
+        show: true,
+      },
+      items: {
+        display: "flex",
       },
     },
   };

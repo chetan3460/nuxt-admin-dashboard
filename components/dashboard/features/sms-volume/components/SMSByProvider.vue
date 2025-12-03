@@ -76,7 +76,7 @@ const chartOptions = computed(() => {
       },
       axisBorder: {
         show: true,
-        color: isDark ? "#9CA3AF" : "#4B5563",
+        color: isDark ? "#666" : "#666",
       },
       axisTicks: {
         show: true,
@@ -91,7 +91,7 @@ const chartOptions = computed(() => {
       },
       axisBorder: {
         show: true,
-        color: isDark ? "#9CA3AF" : "#4B5563",
+        color: isDark ? "#666" : "#666",
       },
       axisTicks: {
         show: true,
@@ -156,15 +156,17 @@ const chartOptions = computed(() => {
         </div>
       </div>
       <CardContent class="flex-1 flex flex-col">
-        <div class="relative w-full h-[400px] overflow-y-auto">
-          <ClientOnly>
-            <apexchart
-              type="bar"
-              height="100%"
-              :options="chartOptions"
-              :series="series"
-            ></apexchart>
-          </ClientOnly>
+        <div class="relative w-full max-h-[400px] overflow-y-auto">
+          <div style="min-height: 600px">
+            <ClientOnly>
+              <apexchart
+                type="bar"
+                height="600"
+                :options="chartOptions"
+                :series="series"
+              ></apexchart>
+            </ClientOnly>
+          </div>
         </div>
         <div
           class="py-1 px-2 bg-[#E2F5FD] dark:bg-[#0D475F] rounded-[8px] inline-block mt-3 max-w-max"

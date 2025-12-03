@@ -2,7 +2,7 @@
 import { useSidebarStore } from "@/stores/sidebar";
 import { cn } from "@/utils";
 import { useMediaQuery } from "@vueuse/core";
-import logoSrc from "@/assets/images/logo.svg?url";
+import NexusLogo from "@/components/partials/sidebar/common/NexusLogo.vue";
 
 const props = defineProps<{
   handleOpenSearch?: () => void;
@@ -29,11 +29,7 @@ const toggleCollapsed = () => {
       to="/dashboard-v2"
       class="text-primary"
     >
-      <img
-        :src="logoSrc"
-        alt="Logo"
-        class="h-6 md:h-7 w-auto"
-      />
+      <NexusLogo :collapsed="false" />
     </NuxtLink>
 
     <!-- Menu Bar -->
