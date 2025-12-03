@@ -1,5 +1,21 @@
 {
   "name": "nuxt-admin-dashboard",
+  "version": "1.0.0",
+  "description": "A modern, high-performance admin dashboard built with Nuxt 3, Tailwind CSS, and TypeScript",
+  "homepage": "https://nexus-dashboard-chetan.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chetan3460/nuxt-admin-dashboard.git"
+  },
+  "keywords": [
+    "nuxt",
+    "vue",
+    "dashboard",
+    "admin",
+    "tailwindcss",
+    "typescript",
+    "nexus"
+  ],
   "private": true,
   "type": "module",
   "scripts": {
